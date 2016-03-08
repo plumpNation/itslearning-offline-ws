@@ -10,16 +10,22 @@ Example 1
  * *created at* datetime.
 
 ## What to do
-1. Serve the example1.html page from your webserver in your browser (Firefox or Chrome?).
-2. Use service workers to load the page and static assets.
+1. View example1.html page (running in your local webserver) in the browser.
+2. Use service workers to cache the page assets to make them available offline.
+3. Use the Resource tab to observe the service worker and cache storage.
+4. Intercept network requests for the assets and serve from the cache if they exist.
 
 ## Service workers
 In production, service workers can only be loaded by https, but since we are working on localhost,
 we are forgiven and can continue to develop on http.
 
 ### Debugging service workers
-In Chrome, open 'Developer Tools'->'Resources'->'Service Workers' to see the status of service
-workers loaded in your browser.
+In Chrome, open 'Developer Tools'->'Resources' and take a look at the different resources
+available.
+
+* Use 'Service Workers' to work with your service worker.
+ * If you want to see only the logs from the service worker, click `inspect`.
+* Use 'Cache Storage' to examine the files the service worker is caching.
 
 To see what your browser has stored from other websites, take a look at chrome://serviceworker-internals.
 

@@ -1,0 +1,18 @@
+{
+    "news": {
+        "items": [
+            {
+                "headline": "News item 1",
+                "created": "2016-01-01T18:00:00.000Z"
+            },
+            {
+                "headline": "News item 2",
+                "created": "2016-01-02T18:00:00.000Z"
+            },
+            {
+                "headline": "News item 3",
+                "created": "2016-01-03T18:00:00.000Z"
+            }
+        ]
+    }
+}

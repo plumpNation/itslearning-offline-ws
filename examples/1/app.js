@@ -2,5 +2,5 @@
 (function () {
     'use strict';
 
-    console.info('Example 1 file is loading');
+    console.info('Example 1 script is running');
 }());

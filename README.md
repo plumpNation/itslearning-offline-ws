@@ -19,5 +19,8 @@ for any reason, be aware that you will need to update the script and link tags i
 3. Ensure your webserver is serving the directory.
 4. Browse to https://localhost:8000
 
+If you get an alert and a console warning that your browser doesn't support service workers, please
+download the latest version of Chrome or Firefox.
+
 ## Follow along
 There is an instructional local README in each of the example folders.

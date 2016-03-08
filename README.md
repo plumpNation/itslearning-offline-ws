@@ -1,7 +1,6 @@
 # itslearning-offline-ws
 
 ## Requirements
-
 You should have a local web server set up, maybe
 
 * Apache
@@ -22,8 +21,10 @@ The workshop files are loading assets from localhost:8000, so if you need to cha
 reason, be aware that you will need to update the script and link tags.
 
 ## Setup
-
 1. Clone repo and createa new git working branch.
 2. Open in your favourite web editor (for HTML, CSS, javascript).
 3. Ensure your webserver is serving the directory.
 4. Browse to localhost:8000
+
+## Follow along
+There is an instructional local README in each of the example folders.

@@ -11,12 +11,10 @@
 
     navigator.serviceWorker
         .register(scope + worker, options)
-        .then(function (reg) {
-            // registration worked
-            console.log('Registration succeeded. Scope is ' + reg.scope);
+        .then(function (registration) {
+            console.info('Example 2 registration succeeded. Scope is ' + registration.scope);
         })
         .catch(function (error) {
-            // registration failed
-            console.error('Registration failed with ' + error);
+            console.warn('Example 2 registration failed with ' + error);
         });
 }());

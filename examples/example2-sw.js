@@ -5,46 +5,112 @@
  */
 
 // The files we want to cache
-var CACHE_NAME = 'example2',
+var CACHE_NAME  = 'v1',
+    version     = CACHE_NAME,
 
     urlsToCache = [
         '/examples/2/',
         '/examples/2/app.js'
-    ];
+    ],
+
+    updateCacheUrls = function (cache) {
+        console.info(version, 'Opened cache', CACHE_NAME);
+
+        return cache.addAll(urlsToCache);
+    },
+
+    removeOldCaches = function(keyList) {
+        var toRemovals = function (key) {
+                if (CACHE_NAME === key) {
+                    return caches.delete(key);
+                }
+            },
+
+            oldCachesAreRemoved = keyList.map(toRemovals);
+
+        return Promise.all(oldCachesAreRemoved);
+    },
+
+    addToCache = function (request, response) {
+        return function (cache) {
+            cache.put(request, response)
+        };
+    },
+
+    cacheRequestResponse = function (request) {
+        return function (response) {
+            var responseToCache;
+
+            if (isAShit(response)) {
+                return response;
+            }
+
+            responseToCache = response.clone();
+
+            caches
+                .open(CACHE_NAME)
+                .then(addToCache(request, responseToCache));
+
+            return response;
+        };
+    },
+
+    tryToReturnCachedAsset = function (request) {
+        return function (response) {
+            var fetchRequest;
+
+            // Cache hit - return response
+            if (response) {
+                return response;
+            }
+
+            fetchRequest = event.request.clone();
+
+            // No hit, allow the request through to try and hit the network
+            return fetch(fetchRequest)
+                .then(cacheRequestResponse(request));
+        }
+    },
+
+    isAShit = function (response) {
+        return !response ||
+            response.status !== 200 ||
+            response.type !== 'basic'
+    },
+
+    handleError = function (err) {
+        console.error(version, err);
+    };
 
 // Set the callback for the install step
 self.addEventListener('install', function (event) {
     var filesAreCached =
             caches
                 .open(CACHE_NAME)
-                .then(function (cache) {
-                    console.info('Opened cache', CACHE_NAME);
-
-                    return cache.addAll(urlsToCache);
-                })
-                .catch(function (err) {
-                    console.error(err);
-                });
+                .then(updateCacheUrls)
+                .catch(handleError);
 
     event.waitUntil(filesAreCached);
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('activate', function (event) {
+    var oldCachesRemoved =
+            caches
+                .keys()
+                .then(removeOldCaches)
+                .catch(handleError);
+
+    console.info(version, 'activating');
+
+    event.waitUntil(oldCachesRemoved);
+});
+
+self.addEventListener('fetch', function (event) {
     var filesFoundInCache =
             caches
                 .match(event.request)
-                .then(function (response) {
-                    // Cache hit - return response
-                    if (response) {
-                        return response;
-                    }
+                .then(tryToReturnCachedAsset(event.request))
+                .catch(handleError);
 
-                    // no hit, allow the request through to try and hit the network
-                    return fetch(event.request);
-                })
-                .catch(function (err) {
-                    console.error(err);
-                });
-
-  event.respondWith(filesFoundInCache);
+    event.respondWith(filesFoundInCache);
 });

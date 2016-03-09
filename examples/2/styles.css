@@ -1,0 +1,21 @@
+h1,
+h2 {
+    font-family: arial, sans;
+}
+
+.example-heading {
+    color: blue;
+}
+
+.example-heading::after {
+    content: '✔';
+    padding-left: .5rem;
+}
+
+.offline .example-heading {
+    color: red;
+}
+
+.offline .example-heading::after {
+    content: '✗';
+}

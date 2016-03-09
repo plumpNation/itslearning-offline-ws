@@ -5,23 +5,23 @@
  */
 
 // The files we want to cache
-var CACHE_NAME  = 'v1',
-    version     = CACHE_NAME,
+var version     = 'v1',
 
     urlsToCache = [
         '/examples/2/',
-        '/examples/2/app.js'
+        '/examples/2/app.js',
+        '/examples/2/styles.css'
     ],
 
     updateCacheUrls = function (cache) {
-        console.info(version, 'Opened cache', CACHE_NAME);
+        console.info(version, 'Opened cache');
 
         return cache.addAll(urlsToCache);
     },
 
-    removeOldCaches = function(keyList) {
+    removeOldCaches = function (keyList) {
         var toRemovals = function (key) {
-                if (CACHE_NAME === key) {
+                if (version !== key) {
                     return caches.delete(key);
                 }
             },
@@ -48,7 +48,7 @@ var CACHE_NAME  = 'v1',
             responseToCache = response.clone();
 
             caches
-                .open(CACHE_NAME)
+                .open(version)
                 .then(addToCache(request, responseToCache));
 
             return response;
@@ -86,7 +86,7 @@ var CACHE_NAME  = 'v1',
 self.addEventListener('install', function (event) {
     var filesAreCached =
             caches
-                .open(CACHE_NAME)
+                .open(version)
                 .then(updateCacheUrls)
                 .catch(handleError);
 

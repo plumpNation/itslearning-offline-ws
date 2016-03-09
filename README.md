@@ -34,5 +34,26 @@ certificate for the domain.
 You may get a message telling you that a script couldn't find service worker compatibility in your
 current browser. Download the latest Chrome and you should be fine.
 
-## Follow along
+## Learning instructions
 There is an instructional local README in each of the example folders.
+
+## Trouble shooting
+If your assets are not loading, please check the README in the root folder and check that your
+webserver is running.
+
+You will need to ensure that the paths to the static assets (css, js) are correct.
+
+If you see an error in your network tab (ERR_FILE_EXISTS) for the service worker, don't worry.
+[This patch](https://bugs.chromium.org/p/chromium/issues/detail?id=541797) will remove that noise,
+you shouldn't experience any issues.
+
+### Debugging service workers
+In Chrome, open 'Developer Tools'->'Resources' and take a look at the different resources
+available.
+
+* Use 'Service Workers' to examine and inspect your service worker.
+* Use 'Cache Storage' to examine the cache trees and files you are storing.
+
+To see what your browser has stored about service workers:
+* chrome://serviceworker-internals
+* chrome://inspect/#service-workers

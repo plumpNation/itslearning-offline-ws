@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-var version = 'v1';
+var version = 'v1-lifecycle-example';
 
 console.log('Running Service Worker', version);
 
@@ -20,4 +20,6 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
     console.info(version, 'requesting', event.request);
+
+    // event.respondWith('console.log(\'BOOM, I\')');
 });

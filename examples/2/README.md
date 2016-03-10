@@ -11,4 +11,10 @@ offline.
  * *created at* datetime.
 
 ## What to do
-1. Serve the example2.html page from your webserver in your browser (Firefox or Chrome?).
+1. Start the web server.
+2. Open the example in the browser and open the console for both the page and the ServiceWorker.
+3. Stop the web server.
+4. Refresh the browser page.
+
+The example is now loading from the CacheStorage, except the styles as they were not included in
+the caching whitelist.

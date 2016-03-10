@@ -37,6 +37,18 @@ current browser. Download the latest Chrome and you should be fine.
 ## Learning instructions
 There is an instructional local README in each of the example folders.
 
+### 0
+Basic offline detection
+
+### 1
+Introduction to ServiceWorkers
+
+### 2
+Introduction to Cache API
+
+### 3
+Introduction to localforage?
+
 ## Trouble shooting
 If your assets are not loading, please check the README in the root folder and check that your
 webserver is running.

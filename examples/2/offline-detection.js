@@ -19,7 +19,7 @@
             updateOnlineStatus();
         };
 
-    console.info('0. Offline detection example: running');
+    console.info('2. Offline detection running');
 
     window.addEventListener('load', onDocumentReady);
 }());

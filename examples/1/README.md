@@ -54,8 +54,8 @@ If a console is not open for the ServiceWorker, it's logs will go to the browser
 2. Refresh the page.
  * The ServiceWorker logs are now limited to it's own console
 
-2. Modify the version number.
-3. Refresh the browser.
+3. Modify the version number.
+4. Refresh the browser.
 
 1. View example1.html page (running in your local webserver) in the browser.
 2. Use service workers to cache the page assets to make them available offline.
@@ -67,3 +67,9 @@ If a console is not open for the ServiceWorker, it's logs will go to the browser
  * Make a listener for the activate event.
  * Close the page.
  * Look for the activate event logging.
+
+ ## Todo
+
+ * Create a small example using [upup](https://www.talater.com/upup/)
+ * Find out how *waiting* and *redundant* work and immediate installation etc.
+ * What differences in status occurs if there is an error in the ServiceWorker

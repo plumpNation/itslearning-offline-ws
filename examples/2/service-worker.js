@@ -4,113 +4,180 @@
  * The max scope for a service worker is the location of the worker.
  */
 
-// The files we want to cache
-var version     = 'v1',
+// The version should be unique, it's the name for the CacheStorage instance
+var VERSION = 'v2-cache-example',
 
-    urlsToCache = [
+    // The files we want to cache
+    whitelist = [
         '/examples/2/',
         '/examples/2/app.js',
-        '/examples/2/styles.css'
-    ],
-
-    updateCacheUrls = function (cache) {
-        console.info(version, 'Opened cache');
-
-        return cache.addAll(urlsToCache);
-    },
-
-    removeOldCaches = function (keyList) {
-        var toRemovals = function (key) {
-                if (version !== key) {
-                    return caches.delete(key);
-                }
-            },
-
-            oldCachesAreRemoved = keyList.map(toRemovals);
-
-        return Promise.all(oldCachesAreRemoved);
-    },
-
-    addToCache = function (request, response) {
-        return function (cache) {
-            cache.put(request, response)
-        };
-    },
-
-    cacheRequestResponse = function (request) {
-        return function (response) {
-            var responseToCache;
-
-            if (isAShit(response)) {
-                return response;
-            }
-
-            responseToCache = response.clone();
-
-            caches
-                .open(version)
-                .then(addToCache(request, responseToCache));
-
-            return response;
-        };
-    },
-
-    tryToReturnCachedAsset = function (request) {
-        return function (response) {
-            var fetchRequest;
-
-            // Cache hit - return response
-            if (response) {
-                return response;
-            }
-
-            fetchRequest = event.request.clone();
-
-            // No hit, allow the request through to try and hit the network
-            return fetch(fetchRequest)
-                .then(cacheRequestResponse(request));
-        }
-    },
-
-    isAShit = function (response) {
-        return !response ||
-            response.status !== 200 ||
-            response.type !== 'basic'
-    },
-
-    handleError = function (err) {
-        console.error(version, err);
-    };
+        '/examples/2/offline-detection.js'
+    ];
 
 // Set the callback for the install step
 self.addEventListener('install', function (event) {
-    var filesAreCached =
-            caches
-                .open(version)
-                .then(updateCacheUrls)
-                .catch(handleError);
+    var urlsAreCached = cacheWhitelist(VERSION, whitelist);
 
-    event.waitUntil(filesAreCached);
+    console.info(VERSION, 'installing');
+
+    event.waitUntil(urlsAreCached);
 });
 
 self.addEventListener('activate', function (event) {
-    var oldCachesRemoved =
-            caches
-                .keys()
-                .then(removeOldCaches)
-                .catch(handleError);
+    var oldCachesRemoved = removeOldCaches(VERSION);
 
-    console.info(version, 'activating');
+    console.info(VERSION, 'activating');
 
     event.waitUntil(oldCachesRemoved);
 });
 
 self.addEventListener('fetch', function (event) {
-    var filesFoundInCache =
-            caches
-                .match(event.request)
-                .then(tryToReturnCachedAsset(event.request))
-                .catch(handleError);
+    var updatedResponse =
+            requestFromNetwork(event.request)
+                .then(fallbackToCache(event.request, VERSION))
+                .then(cacheResponseFor(event.request, VERSION));
 
-    event.respondWith(filesFoundInCache);
+    console.info(VERSION, 'fetching', event.request.url);
+
+    event.respondWith(updatedResponse);
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////  HELPERS //////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var NetworkHelper = {
+        GET: function (request) {
+            var validateResponse = function (response) {
+                if (NetworkHelper.isValid(response)) {
+                    return response;
+                }
+
+                console.warn('Asset not found on network', response);
+            };
+
+            console.info('Requesting network for asset');
+
+            return fetch(request.clone()).then(validateResponse);
+        },
+
+        /**
+         * Validates an http response
+         */
+        isValid: function (response) {
+            var failed =
+                    !response ||
+                    response.status !== 200 ||
+                    response.type !== 'basic';
+
+            return !failed;
+        }
+    },
+
+    CacheHelper = {
+        GET: function (request) {
+            var log = function (response) {
+                if (response === undefined) {
+                    console.warn('Cached request not found', VERSION);
+                    return response;
+                }
+
+                console.info('Cached request found', VERSION);
+                return response;
+            };
+
+            return {
+                from: function (cacheName) {
+                    return caches.match(request).then(log);
+                }
+            };
+        },
+
+        DELETE: function (key) {
+            console.info('Removing cache', key);
+
+            return caches.delete(key);
+        },
+
+        PUT: function (request, response) {
+            var updateValue = function (cache) {
+                return cache.put(request, response.clone());
+            };
+
+            return {
+                in: function (cacheName) {
+                    return caches.open(cacheName).then(updateValue);
+                }
+            };
+        }
+    };
+
+function cacheWhitelist(cacheName, whitelist) {
+    var addWhitelist = function (cache) {
+        cache.addAll(whitelist);
+    };
+
+    console.info(cacheName, 'Caching assets', whitelist);
+
+    return caches.open(cacheName).then(addWhitelist);
+}
+
+function removeOldCaches(cacheName) {
+    var outCurrentVersion = function (key) {
+            return cacheName !== key;
+        },
+
+        waitForDeletions = function (deletions) {
+            return Promise.all(deletions);
+        },
+
+        removeOldCaches = function (keys) {
+            keys = keys.filter(outCurrentVersion);
+
+            if (keys.length) {
+                console.info('Removing caches', keys);
+
+                return keys.map(CacheHelper.DELETE);
+            }
+        };
+
+    return caches.keys()
+        .then(removeOldCaches)
+        .then(waitForDeletions);
+}
+
+function cacheResponseFor(request, cacheName) {
+    return function (response) {
+        if (!NetworkHelper.isValid(response)) {
+            console.warn('Response bad, not caching', response);
+            return response;
+        }
+
+        console.info('Caching response', response.url);
+
+        CacheHelper.PUT(request, response).in(cacheName);
+
+        return response;
+    };
+}
+
+function requestFromNetwork(request) {
+    if (!navigator.onLine) {
+        console.warn('You are offline');
+        return
+    }
+
+    console.info('You are online');
+
+    return NetworkHelper.GET(request);
+}
+
+function fallbackToCache(response, cacheName) {
+    if (response) {
+        return response;
+    }
+
+    console.warn('Problem retrieving online asset', response);
+
+    return CacheHelper.GET(event.request).from(cacheName);
+}

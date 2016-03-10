@@ -8,7 +8,7 @@
             'scope': scope
         };
 
-    console.info('ServiceWorker API example: running');
+    console.info('1. ServiceWorker API example: running');
 
     navigator.serviceWorker
         .register(workerUrl, options)

@@ -9,7 +9,8 @@ var VERSION = 'v2-cache-example',
 
     // The files we want to cache
     whitelist = [
-        '/',
+        './',
+        'index.html',
         'app.js',
         'offline-detection.js'
     ];
@@ -37,8 +38,6 @@ self.addEventListener('fetch', function (event) {
                 .then(fallbackToCache(event.request, VERSION))
                 .then(cacheResponseFor(event.request, VERSION));
 
-    console.info(VERSION, 'fetching', event.request.url);
-
     event.respondWith(updatedResponse);
 });
 
@@ -53,10 +52,10 @@ var NetworkHelper = {
                     return response;
                 }
 
-                console.warn('Asset not found on network', response);
+                console.warn('Bad network response', request.url);
             };
 
-            console.info('Requesting network for asset');
+            console.info('Requesting network', request.url);
 
             return fetch(request.clone()).then(validateResponse);
         },
@@ -78,7 +77,7 @@ var NetworkHelper = {
         GET: function (request) {
             var log = function (response) {
                 if (response === undefined) {
-                    console.warn('Cached request not found', VERSION);
+                    console.warn('Cached request not found in ', VERSION, request.url);
                     return response;
                 }
 
@@ -113,15 +112,21 @@ var NetworkHelper = {
     };
 
 function cacheWhitelist(cacheName, whitelist) {
-    var addWhitelist = function (cache) {
-        cache.addAll(whitelist);
-    };
+    var addWhitelistToCache = function (cache) {
+            return cache.addAll(whitelist);
+        };
 
     console.info(cacheName, 'Caching assets', whitelist);
 
-    return caches.open(cacheName).then(addWhitelist);
+    return caches.open(cacheName)
+        .then(addWhitelistToCache);
 }
 
+/**
+ * Removes all scope CacheStorage except cacheName provided as filter.
+ *
+ * @param string cacheName Cache with matching name will not be removed.
+ */
 function removeCaches(cacheName) {
     var outCurrentVersion = function (key) {
             return cacheName !== key;
@@ -148,20 +153,34 @@ function removeCaches(cacheName) {
         .then(waitForDeletions);
 }
 
+/**
+ * Updates cached values for request, if request was previously cached.
+ * Therefore it respects the whitelist created in the install.
+ *
+ * @param Object request
+ * @param String cacheName The cache to update
+ */
 function cacheResponseFor(request, cacheName) {
     return function (response) {
-        console.info(request);
-
         if (!NetworkHelper.isValid(response)) {
             console.warn('Not caching', response);
             return response;
         }
 
-        console.info('Caching response', response.url);
+        return caches.match(request)
+            .then(function (requestFoundInCache) {
+                console.log('Checking if should cache', request.url);
 
-        CacheHelper.PUT(request, response).in(cacheName);
+                if (requestFoundInCache) {
+                    console.info('Caching response for', response.url);
+                    CacheHelper.PUT(request, response).in(cacheName);
 
-        return response;
+                } else {
+                    console.warn('Not caching response for', response.url);
+                }
+
+                return response;
+            })
     };
 }
 
@@ -186,4 +205,9 @@ function fallbackToCache(request, cacheName) {
 
         return CacheHelper.GET(request).from(cacheName);
     }
+}
+
+setAbsoluteWhitelist = function (cacheKeys) {
+    console.log('setting keys', cacheKeys);
+    absoluteWhitelist = cacheKeys;
 }

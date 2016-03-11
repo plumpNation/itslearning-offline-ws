@@ -34,9 +34,8 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
     var updatedResponse =
-            requestFromNetwork(event.request)
-                .then(fallbackToCache(event.request, VERSION))
-                .then(cacheResponseFor(event.request, VERSION));
+            requestFromNetwork(event.request, VERSION)
+                .then(fallbackToCache(event.request, VERSION));
 
     event.respondWith(updatedResponse);
 });
@@ -57,7 +56,11 @@ var NetworkHelper = {
 
             console.info('Requesting network', request.url);
 
-            return fetch(request.clone()).then(validateResponse);
+            return fetch(request.clone())
+                .catch(function (err) {
+                    console.warn(err.message);
+                })
+                .then(validateResponse);
         },
 
         /**
@@ -77,11 +80,12 @@ var NetworkHelper = {
         GET: function (request) {
             var log = function (response) {
                 if (response === undefined) {
-                    console.warn('Cached request not found in ', VERSION, request.url);
-                    return response;
+                    console.warn('Not found in cache', request.url);
+
+                } else {
+                    console.info('Found in cache', request.url);
                 }
 
-                console.info('Cached request found', VERSION);
                 return response;
             };
 
@@ -184,7 +188,7 @@ function cacheResponseFor(request, cacheName) {
     };
 }
 
-function requestFromNetwork(request) {
+function requestFromNetwork(request, cacheName) {
     if (!navigator.onLine) {
         console.warn('You are offline');
         return Promise.resolve(undefined);
@@ -192,7 +196,8 @@ function requestFromNetwork(request) {
 
     console.info('You are online');
 
-    return NetworkHelper.GET(request);
+    return NetworkHelper.GET(request)
+        .then(cacheResponseFor(request, cacheName));
 }
 
 function fallbackToCache(request, cacheName) {
@@ -201,7 +206,7 @@ function fallbackToCache(request, cacheName) {
             return response;
         }
 
-        console.warn('Problem retrieving online asset', response);
+        console.warn('Problem retrieving online asset', request.url);
 
         return CacheHelper.GET(request).from(cacheName);
     }

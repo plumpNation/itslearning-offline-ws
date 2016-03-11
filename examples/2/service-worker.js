@@ -9,9 +9,9 @@ var VERSION = 'v2-cache-example',
 
     // The files we want to cache
     whitelist = [
-        '/examples/2/',
-        '/examples/2/app.js',
-        '/examples/2/offline-detection.js'
+        '/',
+        'app.js',
+        'offline-detection.js'
     ];
 
 // Set the callback for the install step
@@ -139,8 +139,6 @@ function removeCaches(cacheName) {
             keys = keys.filter(outCurrentVersion);
 
             if (keys.length) {
-                console.info('Removing caches', keys);
-
                 return keys.map(CacheHelper.DELETE);
             }
         };
@@ -152,6 +150,8 @@ function removeCaches(cacheName) {
 
 function cacheResponseFor(request, cacheName) {
     return function (response) {
+        console.info(request);
+
         if (!NetworkHelper.isValid(response)) {
             console.warn('Not caching', response);
             return response;

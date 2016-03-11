@@ -2,8 +2,8 @@
 (function () {
     'use strict';
 
-    var scope     = 'http://localhost:8000/examples/1/',
-        workerUrl = scope + 'service-worker.js',
+    var scope     = './',
+        workerUrl = 'service-worker.js',
         options   = {
             'scope': scope
         };

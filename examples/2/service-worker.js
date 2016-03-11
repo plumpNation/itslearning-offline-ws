@@ -24,7 +24,7 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('activate', function (event) {
-    var oldCachesRemoved = removeOldCaches(VERSION);
+    var oldCachesRemoved = removeCaches(VERSION);
 
     console.info(VERSION, 'activating');
 
@@ -122,12 +122,16 @@ function cacheWhitelist(cacheName, whitelist) {
     return caches.open(cacheName).then(addWhitelist);
 }
 
-function removeOldCaches(cacheName) {
+function removeCaches(cacheName) {
     var outCurrentVersion = function (key) {
             return cacheName !== key;
         },
 
         waitForDeletions = function (deletions) {
+            if (!deletions || !deletions.length) {
+                return;
+            }
+
             return Promise.all(deletions);
         },
 
@@ -149,7 +153,7 @@ function removeOldCaches(cacheName) {
 function cacheResponseFor(request, cacheName) {
     return function (response) {
         if (!NetworkHelper.isValid(response)) {
-            console.warn('Response bad, not caching', response);
+            console.warn('Not caching', response);
             return response;
         }
 
@@ -164,7 +168,7 @@ function cacheResponseFor(request, cacheName) {
 function requestFromNetwork(request) {
     if (!navigator.onLine) {
         console.warn('You are offline');
-        return
+        return Promise.resolve(undefined);
     }
 
     console.info('You are online');
@@ -172,12 +176,14 @@ function requestFromNetwork(request) {
     return NetworkHelper.GET(request);
 }
 
-function fallbackToCache(response, cacheName) {
-    if (response) {
-        return response;
+function fallbackToCache(request, cacheName) {
+    return function (response) {
+        if (response) {
+            return response;
+        }
+
+        console.warn('Problem retrieving online asset', response);
+
+        return CacheHelper.GET(request).from(cacheName);
     }
-
-    console.warn('Problem retrieving online asset', response);
-
-    return CacheHelper.GET(event.request).from(cacheName);
 }

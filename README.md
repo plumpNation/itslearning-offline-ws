@@ -19,9 +19,6 @@ python -m SimpleHTTPServer 8000
 
 You can access the served directory at localhost:8000 or 127.0.0.1:8000 to browse the examples.
 
-The workshop files are loading assets from localhost:8000, so if you need to change this for any
-reason, be aware that you will need to update the script and link tags.
-
 You can use **localhost** to develop service workers locally on http, unless you have a valid TLS
 certificate for the domain.
 

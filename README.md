@@ -1,5 +1,23 @@
 # itslearning-offline-ws
 
+## What the hell is going on in here?
+If you have not been working with javascript or html for a while, some of the patterns in these
+examples may look a little strange.
+
+If you want to know more about some of these techniques, I have created a list of those patterns
+here.
+
+* [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+* [fetch](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) and
+[a more informal article](https://davidwalsh.name/fetch)
+ * [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)
+ * [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
+* [CacheStorage](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) and
+[Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
+* [ServiceWorker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+* [Functional programming](https://www.smashingmagazine.com/2014/07/dont-be-scared-of-functional-programming/)
+ * [Higher order functions](https://medium.com/humans-create-software/a-dirt-simple-introduction-to-higher-order-functions-in-javascript-b33bf9e19056#.dmal6ulvs)
+
 ## Requirements
 I recommend that you use Chrome for this workshop. The READMEs will prioritise Chrome.
 
@@ -41,9 +59,12 @@ Basic offline detection
 Introduction to ServiceWorkers
 
 ### 2
-Introduction to Cache API
+ServiceWorkers: Interfering with requests
 
 ### 3
+Introduction to Cache API
+
+### 4
 Introduction to localforage?
 
 ## Trouble shooting

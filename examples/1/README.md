@@ -9,11 +9,14 @@
 
 ## What is this section about?
 This section is about acquainting yourself with the basic ServiceWorker lifecycle, events and
-tooling. There is a small section on debugging ServiceWorkers in the developer tools in the README
-found on the root.
+tooling (in Chrome). There is a small section on debugging ServiceWorkers in the developer tools in
+the README found on the root.
 
 If you see **DT**:somethingblabla, the DT stands for **Developer Tools** and refers to the Chrome
 developer tools that contain the javascript console, network tab, resources tab etc.
+
+If you want to learn about the tooling in Firefox,
+[take a look at this video](https://www.youtube.com/watch?v=1FWUYHxt5W4).
 
 ## The Lifecycle of the API
 
@@ -67,9 +70,3 @@ If a console is not open for the ServiceWorker, it's logs will go to the browser
  * Make a listener for the activate event.
  * Close the page.
  * Look for the activate event logging.
-
- ## Todo
-
- * Create a small example using [upup](https://www.talater.com/upup/)
- * Find out how *waiting* and *redundant* work and immediate installation etc.
- * What differences in status occurs if there is an error in the ServiceWorker

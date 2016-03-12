@@ -1,5 +1,5 @@
-Example 2
-=========
+Kitchen sink
+============
 
 ## What is in the page?
 1. A list of hardcoded news articles.

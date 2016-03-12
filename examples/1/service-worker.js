@@ -19,7 +19,5 @@ self.addEventListener('activate', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-    console.info(version, 'requesting', event.request);
-
-    // event.respondWith('console.log(\'BOOM, I\')');
+    console.info(version, 'requesting', event.request.url);
 });

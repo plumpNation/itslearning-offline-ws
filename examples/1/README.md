@@ -27,7 +27,7 @@ The main lifecycle of a service worker is:
 3. The service worker is activated if it is different to the one already stored, or is the first
 service worker for the scope.
 
-## Useful events
+## The ServiceWorker events
 * install  - a new or modified script is downloaded and installed.
 * activate - a new or modified script is now ready to use.
 * fetch    - A request was made, and the service worker heard it.

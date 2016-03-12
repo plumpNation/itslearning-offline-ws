@@ -8,13 +8,13 @@ If you want to know more about some of these techniques, I have created a list o
 here.
 
 * [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-* [fetch](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) and
+* [Fetch API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) and
 [a more informal article](https://davidwalsh.name/fetch)
  * [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)
  * [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
 * [CacheStorage](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) and
 [Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
-* [ServiceWorker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+* [ServiceWorker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 * [Functional programming](https://www.smashingmagazine.com/2014/07/dont-be-scared-of-functional-programming/)
  * [Higher order functions](https://medium.com/humans-create-software/a-dirt-simple-introduction-to-higher-order-functions-in-javascript-b33bf9e19056#.dmal6ulvs)
 
@@ -52,20 +52,13 @@ current browser. Download the latest Chrome and you should be fine.
 ## Learning instructions
 There is an instructional local README in each of the example folders.
 
-### 0
-Basic offline detection
-
-### 1
-Introduction to ServiceWorkers
-
-### 2
-ServiceWorkers: Interfering with requests
-
-### 3
-Introduction to Cache API
-
-### 4
-Introduction to localforage?
+- Basic offline detection.
+- Introduction to ServiceWorkers and their lifecycle.
+- ServiceWorkers: Interfering with requests.
+- Introduction to the Cache API.
+- Introduction to localforage?
+- push notifications?
+- The kitchen sink. An example of all the techniques used together.
 
 ## Trouble shooting
 If your assets are not loading, please check the README in the root folder and check that your

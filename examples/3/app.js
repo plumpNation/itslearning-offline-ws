@@ -13,40 +13,40 @@
                 });
         },
 
-        cacheThis = function (cacheName, request, response) {
-            return caches.open(cacheName)
-                .then(function (cache) {
-                    return cache.put(request.clone(), response.clone());
-                });
+        cacheNetworkResponse = function (cacheName, request) {
+            return function (response) {
+                return caches.open(cacheName)
+                    .then(function (cache) {
+                        cache.put(request, response.clone());
+
+                        // We don't need to wait for the asset to finish caching, so we
+                        // can just return the response immediately.
+                        return response;
+                    });
+            };
         },
 
-        fetchCacheFirst = function (uri) {
-            var networkResponse,
-                networkRequest = new Request(uri);
+        cachePriorityFetch = function (uri) {
+            var request = new Request(uri),
+                // IMPORTANT: Clone the request. A request is a stream and
+                // can only be consumed once. We are consuming this
+                // once by cache and once by the browser for fetch.
+                clonedRequest = request.clone();
 
             return caches
-                .match(networkRequest)
+                .match(request)
                 .then(function (cachedResponse) {
                     if (cachedResponse) {
                         return cachedResponse;
 
                     } else {
-                        return fetch(networkRequest)
-                            .then(function (response) {
-                                networkResponse = response;
-
-                                return cacheThis(cacheName, networkRequest, networkResponse);
-
-                            })
-                            .then(function () {
-                                return networkResponse;
-                            });
+                        return fetch(clonedRequest)
+                            .then(cacheNetworkResponse(cacheName, request));
                     }
                 });
         };
 
-    // check the caches for a match to the request
-    fetchCacheFirst('./data.json').then(useTheResponse);
+    cachePriorityFetch('./data.json').then(useTheResponse);
 
     console.info('3. Cache API example: running');
 }());

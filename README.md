@@ -8,6 +8,7 @@ If you want to know more about some of these techniques, I have created a list o
 here.
 
 * [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+and more informally [this article](http://www.html5rocks.com/en/tutorials/es6/promises/).
 * [Fetch API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) and
 [a more informal article](https://davidwalsh.name/fetch)
  * [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)

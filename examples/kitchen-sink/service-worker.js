@@ -16,7 +16,7 @@ var VERSION = 'v1-kitchen-sink-example',
     ];
 
 // Set the callback for the install step
-self.addEventListener('install', function (event) {
+self.addEventListener('install', (event) => {
     var urlsAreCached = cacheWhitelist(VERSION, whitelist);
 
     console.info(VERSION, 'installing');
@@ -24,7 +24,7 @@ self.addEventListener('install', function (event) {
     event.waitUntil(urlsAreCached);
 });
 
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', (event) => {
     var oldCachesRemoved = removeCaches(VERSION);
 
     console.info(VERSION, 'activating');
@@ -32,7 +32,7 @@ self.addEventListener('activate', function (event) {
     event.waitUntil(oldCachesRemoved);
 });
 
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', (event) => {
     var updatedResponse =
             requestFromNetwork(event.request, VERSION)
                 .then(fallbackToCache(event.request, VERSION));
@@ -57,7 +57,7 @@ var NetworkHelper = {
             console.info('Requesting network', request.url);
 
             return fetch(request.clone())
-                .catch(function (err) {
+                .catch((err) => {
                     console.warn(err.message);
                 })
                 .then(validateResponse);
@@ -172,7 +172,7 @@ function cacheResponseFor(request, cacheName) {
         }
 
         return caches.match(request)
-            .then(function (requestFoundInCache) {
+            .then((requestFoundInCache) => {
                 console.log('Checking if should cache', request.url);
 
                 if (requestFoundInCache) {

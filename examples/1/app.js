@@ -12,10 +12,10 @@
 
     navigator.serviceWorker
         .register(workerUrl, options)
-        .then(function (registration) {
-            console.info('1 registration succeeded. Scope is ' + registration.scope);
+        .then((registration) => {
+            console.info('1. registration succeeded. Scope is', registration.scope);
         })
-        .catch(function (error) {
-            console.warn('1 registration failed with ' + error);
+        .catch((error) => {
+            console.warn('1. registration failed with', error);
         });
 }());

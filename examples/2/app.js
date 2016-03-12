@@ -26,7 +26,7 @@
     navigator.serviceWorker
         .register(workerUrl, options)
         .then(runApplication)
-        .catch(function (error) {
-            console.warn('2 registration failed with ' + error);
+        .catch((error) => {
+            console.warn('2. registration failed with', error);
         });
 }());

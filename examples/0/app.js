@@ -22,9 +22,4 @@
 
         updateOnlineStatus();
     });
-
-    navigator.serviceWorker.register('service-worker.js', {scope: './'})
-        .then((registation) => {
-            console.log('boom');
-        });
 }());

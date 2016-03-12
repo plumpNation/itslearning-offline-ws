@@ -11,10 +11,10 @@
 
     navigator.serviceWorker
         .register(worker, options)
-        .then(function (registration) {
-            console.info('Kitchen sink registration succeeded. Scope is ' + registration.scope);
+        .then((registration) => {
+            console.info('Kitchen sink registration succeeded. Scope:', registration.scope);
         })
-        .catch(function (error) {
-            console.warn('Kitchen sink registration failed with ' + error);
+        .catch((error) => {
+            console.warn('Kitchen sink registration failed', error);
         });
 }());

@@ -8,9 +8,9 @@
 // close the browser tab.
 var version = 'v2-lifecycle-example';
 
-console.log('Running Service Worker', version);
+console.log('Executing ServiceWorker', version);
 
-self.addEventListener('install', function (event) {
+self.addEventListener('install', (event) => {
     console.info(version, 'installing');
 
     // to see the install stage in the dev tools
@@ -24,11 +24,11 @@ self.addEventListener('install', function (event) {
     // throw new Error('SMASH');
 });
 
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', (event) => {
     console.info(version, 'activating');
 });
 
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request.url);
 });
 
@@ -37,7 +37,7 @@ self.addEventListener('fetch', function (event) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function delayBy(seconds) {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         setTimeout(function () {
             console.log('boom');
             resolve();

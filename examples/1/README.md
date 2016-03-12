@@ -16,10 +16,40 @@ the README found on the root.
 
 The main lifecycle of a service worker is:
 
-1. The service worker file is downloaded
-2. The service worker is installed in the browser.
-3. The service worker is activated if it is different to the one already stored, or is the first
-service worker for the scope.
+1. The service worker file is downloaded on page load.
+2. The service worker is installed and activated.
+3. It listens for requests.
+
+Once a service worker is installed there is a difference:
+
+1. A new service worker file is downloaded on page load.
+2. The new service worker is installed.
+2. The previous service worker is still installed, so the new service worker takes the 'waiting'
+position.
+3. The old service worker still handles requests.
+4. When the tab is closed, the new service worker is activated.
+5. On subsequent visits, the new service worker handles all requests.
+
+**This `waiting` stage can be overridden to get instant update.** It is called immediate claim and
+there is an [easy example](https://serviceworke.rs/immediate-claim.html) in the
+[mozilla service workers cookbook](https://serviceworke.rs/).
+
+```javascript
+self.skipWaiting();
+```
+
+### installing
+The service worker is downloaded into the browser, parsed and executed.
+
+### waiting
+A previously installed service worker is still in charge of handling requests.
+
+### active
+The service worker handles requests, any old versions are now gone. This is where you can make
+changes that were breaking in older versions, remove old caches etc.
+
+### redundant
+The service worker installation failed.
 
 ## The ServiceWorker events
 * install  - a new or modified script is downloaded and installed.

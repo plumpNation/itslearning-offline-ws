@@ -8,17 +8,17 @@
 // close the browser tab.
 var version = 'v1-request-intercept';
 
-console.log('Running Service Worker', version);
+console.log('Executing ServiceWorker', version);
 
-self.addEventListener('install', function (event) {
+self.addEventListener('install', (event) => {
     console.info(version, 'installing');
 });
 
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', (event) => {
     console.info(version, 'activating');
 });
 
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request);
 
     // if it's not our snippet

@@ -6,7 +6,7 @@
 
         useTheResponse = function (response) {
             response.json()
-                .then(function (json) {
+                .then((json) => {
                     document
                         .getElementById('output')
                         .insertAdjacentHTML('beforeEnd', json.body);
@@ -16,7 +16,7 @@
         cacheNetworkResponse = function (cacheName, request) {
             return function (response) {
                 return caches.open(cacheName)
-                    .then(function (cache) {
+                    .then((cache) => {
                         cache.put(request, response.clone());
 
                         // We don't need to wait for the asset to finish caching, so we
@@ -35,7 +35,7 @@
 
             return caches
                 .match(request)
-                .then(function (cachedResponse) {
+                .then((cachedResponse) => {
                     if (cachedResponse) {
                         return cachedResponse;
 

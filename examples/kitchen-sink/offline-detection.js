@@ -10,16 +10,14 @@
             var state = navigator.onLine ? 'online' : 'offline';
 
             document.body.className = state;
-        },
-
-        onDocumentReady = function () {
-            window.addEventListener('online',  updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-
-            updateOnlineStatus();
         };
 
     console.info('2. Offline detection running');
 
-    window.addEventListener('load', onDocumentReady);
+    window.addEventListener('load', () => {
+        window.addEventListener('online',  updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        updateOnlineStatus();
+    });
 }());

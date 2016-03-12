@@ -18,6 +18,7 @@ and more informally [this article](http://www.html5rocks.com/en/tutorials/es6/pr
 * [ServiceWorker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 * [Functional programming](https://www.smashingmagazine.com/2014/07/dont-be-scared-of-functional-programming/)
  * [Higher order functions](https://medium.com/humans-create-software/a-dirt-simple-introduction-to-higher-order-functions-in-javascript-b33bf9e19056#.dmal6ulvs)
+* [Arrow functions](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
 ## Requirements
 I recommend that you use Chrome for this workshop. The READMEs will prioritise Chrome.

@@ -10,16 +10,21 @@
             var state = navigator.onLine ? 'online' : 'offline';
 
             document.body.className = state;
-        },
-
-        onDocumentReady = function () {
-            window.addEventListener('online',  updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-
-            updateOnlineStatus();
         };
 
     console.info('0. Offline detection example: running');
 
-    window.addEventListener('load', onDocumentReady);
+    window.addEventListener('load', () => {
+        console.info('Adding listeners');
+
+        window.addEventListener('online',  updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        updateOnlineStatus();
+    });
+
+    navigator.serviceWorker.register('service-worker.js', {scope: './'})
+        .then((registation) => {
+            console.log('boom');
+        });
 }());

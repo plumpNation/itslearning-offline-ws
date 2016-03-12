@@ -76,8 +76,11 @@ In Chrome, open 'Developer Tools'->'Resources' and take a look at the different 
 available.
 
 * Use 'Service Workers' to examine and inspect your service worker.
-* Use 'Cache Storage' to examine the cache trees and files you are storing.
+* Use 'Cache Storage' to examine the cache buckets and request/response pairs you are storing.
 
 To see what your browser has stored about service workers:
 * chrome://serviceworker-internals
 * chrome://inspect/#service-workers
+
+If you want to learn about the tooling in Firefox,
+[take a look at this video](https://www.youtube.com/watch?v=1FWUYHxt5W4).

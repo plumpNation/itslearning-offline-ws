@@ -2,21 +2,15 @@
 ===============================
 
 ## What is in the page?
-1. A list of hardcoded news articles.
-2. A CSS file.
-3. A javascript file.
-4. Some arbitrary HTML.
+1. A CSS file.
+2. An application script.
+3. A service worker containing listeners for the basic events.
+4. A basic HTML page to load the example.
 
 ## What is this section about?
 This section is about acquainting yourself with the basic ServiceWorker lifecycle, events and
 tooling (in Chrome). There is a small section on debugging ServiceWorkers in the developer tools in
 the README found on the root.
-
-If you see **DT**:somethingblabla, the DT stands for **Developer Tools** and refers to the Chrome
-developer tools that contain the javascript console, network tab, resources tab etc.
-
-If you want to learn about the tooling in Firefox,
-[take a look at this video](https://www.youtube.com/watch?v=1FWUYHxt5W4).
 
 ## The Lifecycle of the API
 

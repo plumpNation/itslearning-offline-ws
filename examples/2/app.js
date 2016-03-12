@@ -11,12 +11,13 @@
         runApplication = function (registration) {
             console.info('2 registration succeeded. Scope is ' + registration.scope);
 
-            fetch('./data.json')
+            fetch('./snippet.html')
                 .then(function (response) {
-                    return response.json();
+                    return response.text();
                 })
-                .then(function (json) {
-                    console.log(json);
+                .then(function (html) {
+                    document.getElementById('output')
+                        .insertAdjacentHTML('beforeEnd', html);
                 });
         };
 

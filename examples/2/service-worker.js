@@ -21,10 +21,14 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
     console.info(version, 'requesting', event.request);
 
-    if (event.request.url.endsWith('/data.json')) {
-        console.info('intercepting data.json request');
-
-        // https://developer.mozilla.org/en-US/docs/Web/API/Response
-        event.respondWith(new Response('{"foobar": "gazonk"}'));
+    // if it's not our snippet
+    if (!event.request.url.endsWith('/snippet.html')) {
+        // do nothing
+        return;
     }
+
+    // but if it is, mess with it.
+    console.info('intercepting request');
+
+    event.respondWith(new Response('<h2>Bazinga!</h2>'));
 });

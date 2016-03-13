@@ -5,7 +5,7 @@
  */
 
 // The version should be unique, it's the name for the CacheStorage instance
-var VERSION = 'v1-kitchen-sink-example',
+let VERSION = 'v1-kitchen-sink-example',
 
     // The files we want to cache
     whitelist = [
@@ -17,7 +17,7 @@ var VERSION = 'v1-kitchen-sink-example',
 
 // Set the callback for the install step
 self.addEventListener('install', (event) => {
-    var urlsAreCached = cacheWhitelist(VERSION, whitelist);
+    let urlsAreCached = cacheWhitelist(VERSION, whitelist);
 
     console.info(VERSION, 'installing');
 
@@ -25,7 +25,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-    var oldCachesRemoved = removeCaches(VERSION);
+    let oldCachesRemoved = removeCaches(VERSION);
 
     console.info(VERSION, 'activating');
 
@@ -33,7 +33,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    var updatedResponse =
+    let updatedResponse =
             requestFromNetwork(event.request, VERSION)
                 .then(fallbackToCache(event.request, VERSION));
 
@@ -44,9 +44,9 @@ self.addEventListener('fetch', (event) => {
 ////////////////////////////////////////////  HELPERS //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var NetworkHelper = {
+let NetworkHelper = {
         GET: function (request) {
-            var validateResponse = function (response) {
+            let validateResponse = function (response) {
                 if (NetworkHelper.isValid(response)) {
                     return response;
                 }
@@ -67,7 +67,7 @@ var NetworkHelper = {
          * Validates an http response
          */
         isValid: function (response) {
-            var failed =
+            let failed =
                     !response ||
                     response.status !== 200 ||
                     response.type !== 'basic';
@@ -78,7 +78,7 @@ var NetworkHelper = {
 
     CacheHelper = {
         GET: function (request) {
-            var log = function (response) {
+            let log = function (response) {
                 if (response === undefined) {
                     console.warn('Not found in cache', request.url);
 
@@ -103,7 +103,7 @@ var NetworkHelper = {
         },
 
         PUT: function (request, response) {
-            var updateValue = function (cache) {
+            let updateValue = function (cache) {
                 return cache.put(request, response.clone());
             };
 
@@ -116,7 +116,7 @@ var NetworkHelper = {
     };
 
 function cacheWhitelist(cacheName, whitelist) {
-    var addWhitelistToCache = function (cache) {
+    let addWhitelistToCache = function (cache) {
             return cache.addAll(whitelist);
         };
 
@@ -132,7 +132,7 @@ function cacheWhitelist(cacheName, whitelist) {
  * @param string cacheName Cache with matching name will not be removed.
  */
 function removeCaches(cacheName) {
-    var outCurrentVersion = function (key) {
+    let outCurrentVersion = function (key) {
             return cacheName !== key;
         },
 

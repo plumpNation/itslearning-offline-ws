@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var scope     = './',
+    let scope     = './',
         worker    = 'service-worker.js',
         options   = {
             'scope': scope

@@ -14,7 +14,7 @@
 
 ```javascript
 // If you just want to know if you are online right now
-var state = navigator.onLine ? 'online' : 'offline';
+let state = navigator.onLine ? 'online' : 'offline';
 
 alert('you are currently ' + state);
 

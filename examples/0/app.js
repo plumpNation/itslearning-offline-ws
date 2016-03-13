@@ -6,8 +6,8 @@
 (function () {
     'use strict';
 
-    var updateOnlineStatus = function () {
-            var state = navigator.onLine ? 'online' : 'offline';
+    let updateOnlineStatus = function () {
+            let state = navigator.onLine ? 'online' : 'offline';
 
             document.body.className = state;
         };

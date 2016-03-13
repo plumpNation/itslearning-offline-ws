@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-var version = 'v2-lifecycle-example';
+let version = 'v2-lifecycle-example';
 
 console.log('Executing ServiceWorker', version);
 
@@ -14,7 +14,7 @@ self.addEventListener('install', (event) => {
     console.info(version, 'installing');
 
     // to see the install stage in the dev tools
-    // var aTimeHasPassed = delayBy(5);
+    // let aTimeHasPassed = delayBy(5);
     // event.waitUntil(aTimeHasPassed);
 
     // To activate the service worker immediately...

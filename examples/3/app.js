@@ -2,51 +2,54 @@
 (function () {
     'use strict';
 
-    var cacheName = 'v1-cache-api-example',
+    let cacheName = 'v1-cache-api-example';
 
-        useTheResponse = function (response) {
-            response.json()
-                .then((json) => {
-                    document
-                        .getElementById('output')
-                        .insertAdjacentHTML('beforeEnd', json.body);
-                });
-        },
-
-        cacheNetworkResponse = function (cacheName, request) {
-            return function (response) {
-                return caches.open(cacheName)
-                    .then((cache) => {
-                        cache.put(request, response.clone());
-
-                        // We don't need to wait for the asset to finish caching, so we
-                        // can just return the response immediately.
-                        return response;
-                    });
-            };
-        },
-
-        cachePriorityFetch = function (uri) {
-            var request = new Request(uri),
-                // IMPORTANT: Clone the request. A request is a stream and
-                // can only be consumed once. We are consuming this
-                // once by cache and once by the browser for fetch.
-                clonedRequest = request.clone();
-
-            return caches
-                .match(request)
-                .then((cachedResponse) => {
-                    if (cachedResponse) {
-                        return cachedResponse;
-
-                    } else {
-                        return fetch(clonedRequest)
-                            .then(cacheNetworkResponse(cacheName, request));
-                    }
-                });
-        };
+    console.info('3. Cache API example: running');
 
     cachePriorityFetch('./data.json').then(useTheResponse);
 
-    console.info('3. Cache API example: running');
+    function cachePriorityFetch(uri) {
+        let request = new Request(uri),
+            // IMPORTANT: Clone the request. A request is a stream and
+            // can only be consumed once. We are consuming this
+            // once by cache and once by the browser for fetch.
+            clonedRequest = request.clone();
+
+        return caches
+            .match(request)
+            .then((cachedResponse) => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+
+                return fetch(clonedRequest)
+                    .then(cacheNetworkResponse(cacheName, request));
+            });
+    };
+
+    function cacheNetworkResponse(cacheName, request) {
+        return function (response) {
+            return caches.open(cacheName)
+                .then((cache) => {
+                    cache.put(request, response.clone());
+
+                    // We don't need to wait for the asset to finish caching, so we
+                    // can just return the response immediately.
+                    return response;
+                });
+        };
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////  HELPERS  /////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function useTheResponse(response) {
+        response.json()
+            .then((json) => {
+                document
+                    .getElementById('output')
+                    .insertAdjacentHTML('beforeEnd', json.body);
+            });
+    }
 }());

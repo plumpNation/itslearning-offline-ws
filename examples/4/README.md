@@ -1,7 +1,8 @@
 4. Offline fallback to basic template
 =====================================
 
-This example builds on the Cache API example
+A basic example of how to serve offline content that is precached when the user installs
+a ServiceWorker.
 
 ## What is in the page?
 1. An HTML page to load the example.

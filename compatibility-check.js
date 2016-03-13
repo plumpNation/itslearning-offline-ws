@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var message = 'Your browser supports service workers!';
+    let message = 'Your browser supports service workers!';
 
     if ('serviceWorker' in navigator) {
         console.info(message);

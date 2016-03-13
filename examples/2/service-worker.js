@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-var version = 'v1-request-intercept';
+let version = 'v1-request-intercept';
 
 console.log('Executing ServiceWorker', version);
 

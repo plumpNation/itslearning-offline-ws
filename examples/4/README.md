@@ -4,7 +4,7 @@
 A basic example of how to serve offline content that is precached when the user installs
 a ServiceWorker.
 
-## What is in the page?
+## What is in the folder?
 1. An HTML page to load the example.
 2. An offline html page to return if server cannot be contacted.
 3. An application to register the service worker.

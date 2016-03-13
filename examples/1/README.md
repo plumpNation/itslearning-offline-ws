@@ -1,11 +1,10 @@
-1. ServiceWorker API
-===============================
+1. ServiceWorker Lifecycle
+==========================
 
-## What is in the page?
-1. A CSS file.
-2. An application script.
-3. A service worker containing listeners for the basic events.
-4. A basic HTML page to load the example.
+## What is in the folder?
+1. An application script to register the ServiceWorker.
+2. A service worker containing listeners for the basic events.
+3. A basic HTML page to load the example.
 
 ## What is this section about?
 This section is about acquainting yourself with the basic ServiceWorker lifecycle, events and

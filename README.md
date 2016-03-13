@@ -1,4 +1,5 @@
-# itslearning offline workshop
+itslearning offline workshop
+============================
 
 Before you start, you should know that this set of examples is meant to be a starting point and
 not an exhaustive solution to all your online woes.
@@ -10,6 +11,8 @@ different techniques and APIs.
 Not all of these techniques are available in all browsers at this time, so for now, use Chrome.
 
 This was developed on top of Chrome 49. I would use that version or higher for the time being.
+
+**Always have your console open and your cache turned off.**
 
 ## What the hell is going on in here?
 If you have not been working with javascript for a while, some of the code or patterns in these

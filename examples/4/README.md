@@ -1,4 +1,4 @@
-4. Offline fallback to basic template
+4. CacheStorage and ServiceWorker: Offline fallback to basic template
 =====================================
 
 A basic example of how to serve offline content that is precached when the user installs

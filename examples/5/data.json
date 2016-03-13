@@ -1,0 +1,16 @@
+{
+    "news": [
+        {
+            "id": "1",
+            "headline": "Trump trumpety trump",
+            "body": "Trump went to Chicago and all he came back with was hypocritically sweaty news footage.",
+            "author": "Jeremy Paxman"
+        },
+        {
+            "id": "2",
+            "headline": "People died, we watched Trump.",
+            "body": "People died, we watched Trump. Shame. Shame.",
+            "author": "Kate Adie"
+        }
+    ]
+}

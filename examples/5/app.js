@@ -33,16 +33,18 @@
 
         db.onerror = (event) => console.error('Error loading database');
 
-        objectStore = setupObjectStore(db);
+        setupObjectStore(db);
 
-        createIndexes(objectStore);
+        console.info('database upgraded to', dbVersion);
     };
 
     function setupObjectStore(db) {
-        let objectStore = db.createObjectStore(objectStoreName, {'keyPath': 'id'});
-        console.info('Object store created');
+        if (!db.objectStoreNames.contains(objectStoreName)) {
+            let objectStore = db.createObjectStore(objectStoreName, {'keyPath': 'id'});
 
-        return objectStore;
+            console.info('Object store created');
+            createIndexes(objectStore);
+        }
     }
 
     function createIndexes(objectStore) {
@@ -76,6 +78,7 @@
                 }
 
                 json.news.forEach((newsItem) => objectStore.put(newsItem));
+                console.info('Data updated in database');
             })
             .catch((err) => console.error(err));
     }

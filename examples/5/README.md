@@ -3,14 +3,28 @@
 
 A basic example of how to work with IndexedDB.
 
+## Before you start
+When you're working in this example, open your chrome://settings and click the
+'Show advanced settings...'.
+
+When you want to clear out your IndexedDB completely, simply click `Clear browsing data...`
+and make sure that the checkbox for `Cookies and other site and plugin data` is selected.
+
+The shortcut for this is CTRL + SHIFT + DELETE. Mac users please make a pull request :)
+
+If you want to read about the basic concepts behind IndexedDB, you should
+[start here](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Basic_Concepts_Behind_IndexedDB).
+
 ## What is in the folder?
 1. An HTML page to load the example.
-2. An application to create and
-3.
+2. An application to create and populate an IndexedDB.
+3. A data.json file to containing some terribly bad news.
 
 ## Nice to know about IndexedDB
-* There are two main types of IndexedDB, `persistent` and `temporary`.
-* A database can be versioned.
+* A database is versioned.
+* Adding another version
+* There are still differences between different browser vendors implementations, but they are
+aligning.
 * It's quite complicated to use. There are some very simple wrapper libraries that allow you
 to get up and running straight away, like
  * [dexie](http://dexie.org/)

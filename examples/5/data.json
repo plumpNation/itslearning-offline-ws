@@ -1,15 +1,21 @@
 {
     "news": [
         {
-            "id": "1",
+            "id": 1,
             "headline": "Trump trumpety trump",
             "body": "Trump went to Chicago and all he came back with was hypocritically sweaty news footage.",
             "author": "Jeremy Paxman"
         },
         {
-            "id": "2",
+            "id": 2,
             "headline": "People died, we watched Trump.",
             "body": "People died, we watched Trump. Shame. Shame.",
+            "author": "Kate Adie"
+        },
+        {
+            "id": 3,
+            "headline": "Global warming a lie, or not.",
+            "body": "It really doesn't matter if you believe or not, we live to excess. Shame. Shame.",
             "author": "Kate Adie"
         }
     ]

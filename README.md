@@ -106,7 +106,7 @@ To see what your browser has stored about service workers:
 If you want to learn about the tooling in Firefox,
 [take a look at this video](https://www.youtube.com/watch?v=1FWUYHxt5W4) and read [this article](https://hacks.mozilla.org/2016/03/debugging-service-workers-and-push-with-firefox-devtools/).
 
-## Other important things to know
+## Other important things to consider
 Even if can make a good browser offline experience, should we? What if a computer is a shared
 resource?
 

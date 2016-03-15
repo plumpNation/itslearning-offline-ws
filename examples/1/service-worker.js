@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-let version = 'v2-lifecycle-example';
+let version = 'v1-lifecycle-example';
 
 console.log('Executing ServiceWorker', version);
 

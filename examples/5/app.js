@@ -22,8 +22,6 @@
 
     function onDBOpenSuccess(event) {
         console.info('Database', '"' + dbName + '"', 'version', dbVersion, 'initialised');
-
-        addData(event.target.result);
     };
 
     // Change the Database structure
@@ -40,10 +38,14 @@
 
     function setupObjectStore(db) {
         if (!db.objectStoreNames.contains(objectStoreName)) {
-            let objectStore = db.createObjectStore(objectStoreName, {'keyPath': 'id'});
+            let objectStore = db.createObjectStore(objectStoreName, {'keyPath': 'uuid'});
 
             console.info('Object store created');
             createIndexes(objectStore);
+
+            objectStore.transaction.oncomplete = function(event) {
+                addData(event.target.result);
+            }
         }
     }
 
@@ -59,6 +61,16 @@
         indexes.forEach((index) => objectStore.createIndex(index.name, index.field, index.options));
 
         console.info('Indexes created');
+    }
+
+    function get(db, uuid) {
+        console.info('GETting by uuid', uuid);
+
+        let transaction = createTransaction(db),
+            objectStore = transaction.objectStore(objectStoreName);
+
+        var status = objectStore.get('7440adf1-db41-0675-061f-b11e7cd7866e');
+        debugger;
     }
 
     function addData(db, clearFirst) {
@@ -77,7 +89,7 @@
                     objectStore.clear();
                 }
 
-                json.news.forEach((newsItem) => objectStore.put(newsItem));
+                json.news.forEach((newsItem) => objectStore.put(addUuidTo(newsItem)));
                 console.info('Data updated in database');
             })
             .catch((err) => console.error(err));

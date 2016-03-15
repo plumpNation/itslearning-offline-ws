@@ -1,19 +1,19 @@
 {
     "news": [
         {
-            "id": 1,
+            "uuid": "7440adf1-db41-0675-061f-b11e7cd7866e",
             "headline": "Trump trumpety trump",
             "body": "Trump went to Chicago and all he came back with was hypocritically sweaty news footage.",
             "author": "Jeremy Paxman"
         },
         {
-            "id": 2,
+            "uuid": "52c6511f-b71b-7e49-3b89-04ae9e54512e",
             "headline": "People died, we watched Trump.",
             "body": "People died, we watched Trump. Shame. Shame.",
             "author": "Kate Adie"
         },
         {
-            "id": 3,
+            "uuid": "16949ae6-da14-e7b2-c39b-c78f2f3f6059",
             "headline": "Global warming a lie, or not.",
             "body": "It really doesn't matter if you believe or not, we live to excess. Shame. Shame.",
             "author": "Kate Adie"

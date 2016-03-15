@@ -7,24 +7,24 @@
     font-size: .75rem;
 }
 
-#online-indicator {
+#network-indicator {
     position: absolute;
     bottom: 0;
     width: 100%;
 }
 
-#online-indicator.online {
+#network-indicator.online {
     background: green;
 }
 
-#online-indicator.offline {
+#network-indicator.offline {
     background: red;
 }
 
-#online-indicator.online .is-online {
+#network-indicator.online .is-online {
     display: block;
 }
 
-#online-indicator.offline .is-offline {
+#network-indicator.offline .is-offline {
     display: block;
 }

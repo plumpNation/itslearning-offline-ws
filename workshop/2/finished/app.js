@@ -1,12 +1,7 @@
 (function () {
     'use strict';
 
-    let setupServiceWorker = function () {
-            let options = {'scope': './'},
-                serviceWorkerHelper = new ServiceWorkerHelper('service-worker.js', options);
-        },
-
-        init = function () {
+    let init = function () {
             let newsHelper = new NewsHelper({
                     'target': 'news-items',
                     'service': 'news.json'
@@ -16,8 +11,7 @@
                 .then((response) => newsHelper.populateDOM(response.news));
 
             new NetworkIndicator({'target': 'network-indicator'});
-
-            setupServiceWorker();
+            new ServiceWorkerHelper('service-worker.js', {'scope': './'});
         };
 
     document.addEventListener('DOMContentLoaded', init);

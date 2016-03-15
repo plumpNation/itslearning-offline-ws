@@ -1,4 +1,6 @@
 (function () {
+    'use strict';
+
     let newsHelper,
 
         init = function () {

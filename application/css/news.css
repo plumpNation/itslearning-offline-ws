@@ -157,6 +157,11 @@ h3 {
     text-shadow: 0 1px 1px #333;
 }
 
+.news-avatar {
+    height: 48px;
+    width: 48px;
+}
+
 @media (min-width: 48em) {
     .content {
         padding: 2em 3em 0;
@@ -164,7 +169,7 @@ h3 {
     }
 
     .header {
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         bottom: 0;
         padding: 2rem;
         position: absolute;

@@ -19,25 +19,24 @@
             .match(request)
             .then((cachedResponse) => {
                 if (cachedResponse) {
+                    debugger;
                     return cachedResponse;
                 }
 
                 return fetch(clonedRequest)
-                    .then(cacheNetworkResponse(cacheName, request));
+                    .then((response) => cacheNetworkResponse(cacheName, request, response));
             });
     };
 
-    function cacheNetworkResponse(cacheName, request) {
-        return function (response) {
-            return caches.open(cacheName)
-                .then((cache) => {
-                    cache.put(request, response.clone());
+    function cacheNetworkResponse(cacheName, request, response) {
+        return caches.open(cacheName)
+            .then((cache) => {
+                cache.put(request, response.clone());
 
-                    // We don't need to wait for the asset to finish caching, so we
-                    // can just return the response immediately.
-                    return response;
-                });
-        };
+                // We don't need to wait for the asset to finish caching, so we
+                // can just return the response immediately.
+                return response;
+            });
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

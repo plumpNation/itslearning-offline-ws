@@ -180,6 +180,37 @@ h3 {
     .sidebar {
         position: fixed;
         top: 0;
-        bottom: 0;
+        bottom: 0.5rem;
     }
+}
+
+.is-offline,
+.is-online {
+    color: white;
+    display: none;
+    text-align: center;
+    margin: 0;
+    font-size: .75rem;
+}
+
+#online-indicator {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#online-indicator.online {
+    background: green;
+}
+
+#online-indicator.offline {
+    background: red;
+}
+
+#online-indicator.online .is-online {
+    display: block;
+}
+
+#online-indicator.offline .is-offline {
+    display: block;
 }

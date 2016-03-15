@@ -23,28 +23,22 @@ self.addEventListener('fetch', (event) => {
 
     console.info(version, 'requesting', event.request.url);
 
-    if (requestPath.endsWith('news.json')) {
-        let newsUpdate = {
+    if (!requestPath.endsWith('news.json')) {
+        return;
+    }
+
+    event.respondWith(getMyNewsOverride());
+});
+
+function getMyNewsOverride() {
+    let myNews = {
+            'news': [{
                 'headline': 'I intercepted the request',
                 'body': 'And this is the message of love I am bringing to you <3',
                 'author': 'Gavin King',
                 'avatar': 'gavin'
-            },
+            }]
+        };
 
-            updatedNews = updateNews(event.request, newsUpdate);
-
-        console.info('intercepted news request, adding more to the end');
-
-        event.respondWith(updatedNews);
-    }
-});
-
-function updateNews(request, additionalNews) {
-    return fetch(request)
-        .then((response) => response.json())
-        .then((response) => {
-            response.news = response.news.concat(additionalNews);
-
-            return new Response(JSON.stringify(response));
-        })
+    return new Response(JSON.stringify(myNews));
 }

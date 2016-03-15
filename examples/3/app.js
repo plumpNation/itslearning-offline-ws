@@ -19,7 +19,6 @@
             .match(request)
             .then((cachedResponse) => {
                 if (cachedResponse) {
-                    debugger;
                     return cachedResponse;
                 }
 

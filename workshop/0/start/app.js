@@ -4,13 +4,12 @@
     let newsHelper,
 
         init = function () {
-            debugger;
+            newsHelper = new NewsHelper({
+                'target': 'news-items',
+                'service': './news.json'
+            });
 
-            new NetworkIndicator({'target': 'online-indicator'});
-
-            newsHelper = new NewsHelper({'target': 'news-items'});
-
-            newsHelper.GET('./news.json')
+            newsHelper.GET()
                 .then((response) => newsHelper.populateDOM(response.news));
         };
 

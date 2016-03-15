@@ -7,6 +7,7 @@
      *
      * @param {Object} options
      * @param {string} options.target The id of the container to put the news items in.
+     * @param {string} options.service The uri to the json news service
      * @return void
      */
     let NewsHelper = function (options) {
@@ -22,11 +23,12 @@
         };
 
     NewsHelper.prototype.toArticles = function (newsItem) {
-        let avatarSrc = `img/avatars/${newsItem.avatar}.png`;
+        let avatarSrc = `img/avatars/${newsItem.avatar}.png`,
+            avatarAlt = `${newsItem.author}'s avatar`;
 
         return `<article class="news-item">
             <header class="news-header">
-                <img class="news-avatar" alt="${newsItem.author}'s avatar" src="${avatarSrc}">
+                <img class="news-avatar" alt="${avatarAlt}" src="${avatarSrc}">
                 <h1 class="news-item-headline">${newsItem.headline}</h1>
                 <p class="news-meta">By ${newsItem.author}</p>
             </header>
@@ -44,8 +46,12 @@
         target.insertAdjacentHTML('afterend', newsElements);
     };
 
-    NewsHelper.prototype.GET = function (uri) {
-        return fetch(uri).then((news) => news.json());
+    NewsHelper.prototype.GET = function () {
+        if (!this.options.service) {
+            return new Error('Service URI missing from constuctor options');
+        }
+
+        return fetch(this.options.service).then((news) => news.json());
     };
 
     window.NewsHelper = NewsHelper;

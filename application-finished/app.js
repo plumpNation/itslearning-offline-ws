@@ -3,26 +3,12 @@
 
     let newsHelper,
 
-        onOnlineStateChange = function () {
-            let onlineIndicator = document.getElementById('online-indicator'),
-                onlineState     = navigator.onLine ? 'online' : 'offline';
-
-            onlineIndicator.className = onlineState;
-        },
-
-        setupOfflineEvents = function () {
-            window.addEventListener('offline', onOnlineStateChange);
-            window.addEventListener('online',  onOnlineStateChange);
-
-            onOnlineStateChange();
-        },
-
         init = function () {
-            setupOfflineEvents();
+            debugger;
 
-            newsHelper = new NewsHelper({
-                'target': 'news-items'
-            });
+            new NetworkIndicator({'target': 'online-indicator'});
+
+            newsHelper = new NewsHelper({'target': 'news-items'});
 
             newsHelper.GET('./news.json')
                 .then((response) => newsHelper.populateDOM(response.news));

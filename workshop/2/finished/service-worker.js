@@ -19,26 +19,25 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    let requestPath = event.request.url;
+    let myNews,
+        requestPath = event.request.url;
 
     console.info(version, 'requesting', event.request.url);
 
     if (!requestPath.endsWith('news.json')) {
+        // returning undefined will not change the response or request.
         return;
     }
 
-    event.respondWith(getMyNewsOverride());
+    myNews = JSON.stringify({
+        'news': [{
+            'headline': 'I intercepted the request',
+            'body': 'And this is the message of love I am bringing to you <3',
+            'author': 'Gavin King',
+            'avatar': 'gavin'
+        }]
+    });
+
+    // NOTE: the `respondWith` method is on the `event` object. It requires a `Response` object.
+    event.respondWith(new Response(myNews));
 });
-
-function getMyNewsOverride() {
-    let myNews = {
-            'news': [{
-                'headline': 'I intercepted the request',
-                'body': 'And this is the message of love I am bringing to you <3',
-                'author': 'Gavin King',
-                'avatar': 'gavin'
-            }]
-        };
-
-    return new Response(JSON.stringify(myNews));
-}

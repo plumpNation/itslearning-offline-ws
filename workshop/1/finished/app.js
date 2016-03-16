@@ -9,14 +9,18 @@
                 });
         },
 
-        init = function () {
+        loadAndShowNews = function () {
             let newsHelper = new NewsHelper({
-                    'target': 'news-items',
-                    'service': 'news.json'
-                });
+                'target' : 'news-items',
+                'service': 'news.json'
+            });
 
             newsHelper.GET()
                 .then((response) => newsHelper.populateDOM(response.news));
+        },
+
+        init = function () {
+            loadAndShowNews();
 
             new NetworkIndicator({'target': 'network-indicator'});
 

@@ -19,7 +19,8 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    let requestPath = event.request.url;
+    let newsDataResponse,
+        requestPath = event.request.url;
 
     console.info(version, 'requesting', event.request.url);
 
@@ -28,19 +29,21 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // NOTE: the `respondWith` method is on the `event` object. It requires a `Response` object.
-    event.respondWith(createNewsOverride());
+
+
+    // if cached version exists, respond with it
+    // else fetch the request, cache it and respond with the response
 });
 
-function createNewsOverride() {
-    let myNews = JSON.stringify({
-        'news': [{
-            'headline': 'I intercepted the request',
-            'body': 'And this is the message of love I am bringing to you <3',
-            'author': 'Gavin King',
-            'avatar': 'gavin'
-        }]
-    });
+function getCached(request) {
+    let foundCachedResponse =
+            caches.match(request)
+                .then((response) => );
 
     return new Response(myNews);
+}
+
+function cacheResponse(cacheName, request, response) {
+    // return caches.open(cacheName)
+        .put(request.clone)
 }

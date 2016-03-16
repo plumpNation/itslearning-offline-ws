@@ -19,8 +19,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    let myNews,
-        requestPath = event.request.url;
+    let requestPath = event.request.url;
 
     console.info(version, 'requesting', event.request.url);
 
@@ -29,15 +28,6 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    myNews = JSON.stringify({
-        'news': [{
-            'headline': 'I intercepted the request',
-            'body'    : 'And this is the message of love I am bringing to you <3',
-            'author'  : 'Gavin King',
-            'avatar'  : 'gavin'
-        }]
-    });
-
-    // NOTE: the `respondWith` method is on the `event` object. It requires a `Response` object.
-    event.respondWith(new Response(myNews));
+    // if cached version exists, respond with it
+    // else fetch the request, cache it and respond with the response
 });

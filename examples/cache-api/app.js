@@ -4,7 +4,7 @@
 
     let cacheName = 'v1-cache-api-example';
 
-    console.info('3. Cache API example: running');
+    console.info('Cache API example: running');
 
     cachePriorityFetch('./data.json').then(useTheResponse);
 

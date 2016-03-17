@@ -5,7 +5,7 @@
         dbVersion       = 1,
         objectStoreName = 'news';
 
-    console.info('5. IndexedDB example: running');
+    console.info('IndexedDB example: running');
 
     window.onload = init;
 

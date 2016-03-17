@@ -9,8 +9,9 @@
         },
 
         runApplication = function (registration) {
-            console.info('2 registration succeeded. Scope is ' + registration.scope);
+            console.info('Registration succeeded. Scope is ' + registration.scope);
 
+            // This is the request that is intercepted in the service worker.
             fetch('./snippet.html')
                 .then(function (response) {
                     return response.text();
@@ -21,12 +22,12 @@
                 });
         };
 
-    console.info('2. ServiceWorker intercept request example: running');
+    console.info('ServiceWorker intercept request example: running');
 
     navigator.serviceWorker
         .register(workerUrl, options)
         .then(runApplication)
         .catch((error) => {
-            console.warn('2. registration failed with', error);
+            console.warn('Registration failed with', error);
         });
 }());

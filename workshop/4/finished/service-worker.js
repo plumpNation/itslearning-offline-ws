@@ -1,12 +1,4 @@
-/**
- * A service worker must be directly on the scope.
- * The service worker will only catch requests from clients under the service worker's scope.
- * The max scope for a service worker is the location of the worker.
- */
-
-// Adjust this version and watch the effect it has on the workers when you refresh, then
-// close the browser tab.
-let version = 'v1-cache-api';
+let version = 'v1-returning-cached-data';
 
 console.info('Executing service worker for', version);
 
@@ -27,7 +19,7 @@ self.addEventListener('fetch', (event) => {
     }
 
     // Since we are taking control of the request, we will have to provide a response.
-    event.respondWith(fetchAndCache(version, event.request));
+    event.respondWith(fetchCachePriority(version, event.request));
 });
 
 /**
@@ -37,20 +29,28 @@ self.addEventListener('fetch', (event) => {
  * @param  {Request} request
  * @return {Promise} A Promise that resolves to a Response object.
  */
-function fetchAndCache(cacheName, request) {
-    // Clone the request; we should only use each instance once
+function fetchCachePriority(cacheName, request) {
     let requestClone = request.clone();
 
-    // by returning the fetch().then() chain we are returning a Promise object
-    return fetch(requestClone)
+    // check the cachestorage for a match
+    console.info('Looking for cached data');
+    return caches.match(request)
+        .then((cachedResponse) => {
+            if (cachedResponse) {
+                console.info('Found cached data');
+                return cachedResponse;
+            }
+
+            console.info('Data not found in cache, fetching from network');
+            return fetch(requestClone);
+        })
         .then((response) => cacheResponse(cacheName, request, response));
 }
 
 /**
- * @param  {string}   cacheName
- * @param  {Request}  request
- * @param  {Response} response
- * @return {Response} The response object we passed in
+ * @param {string}   cacheName
+ * @param {Request}  request
+ * @param {Response} response
  */
 function cacheResponse(cacheName, request, response) {
     // We need to clone the response too, as we will use it more than once.
@@ -61,7 +61,5 @@ function cacheResponse(cacheName, request, response) {
     caches.open(cacheName)
         .then((cache) => cache.put(request, responseClone));
 
-    // cache.put is asynchronous but we don't need to wait for the cache to be written,
-    // to response, so we can return the response straight away.
     return response;
 }

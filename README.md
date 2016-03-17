@@ -76,11 +76,13 @@ There is a local README in each of the example folders. You should read that.
 
 - Basic offline detection.
 - Introduction to ServiceWorkers and their lifecycle.
-- ServiceWorkers: Interfering with requests.
+- ServiceWorkers
+ - Interfering with requests.
+ - Caching and returning offline content
 - Introduction to the Cache API.
-- ServiceWorkers: Caching and returning offline content.
+ - Write a request response key value pair to the Cache.
+ - Check if cache exists for a request
 - Introduction to IndexedDB
-- The kitchen sink. An example of all the techniques used together.
 
 ## Trouble shooting
 ### Page is not loading

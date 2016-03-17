@@ -1,9 +1,36 @@
-let version = 'v1-returning-cached-data';
+let version = 'v1-caching-page-assets',
+
+    // The files we want to cache
+    whitelist = [
+        './',
+        'css/pure/pure-min.css',
+        'css/pure/grids-responsive-min.css',
+        'css/news.css',
+        'css/components/network-indicator.css',
+        'lib/news-helper.js',
+        'lib/service-worker-helper.js',
+        'lib/network-indicator.js',
+        'app.js',
+        'news.json',
+        'img/kingsman-logo.png',
+        'img/avatars/gavin.png'
+    ];
 
 console.info('Executing service worker for', version);
 
 self.addEventListener('install', (event) => {
+    let cachesAreWritten = function () {
+        console.info('adding whitelist to cache');
+
+        return caches
+            .open(version)
+            .then((cache) => cache.addAll(whitelist));
+    };
+
+
     console.info(version, 'installing');
+
+    event.waitUntil(cachesAreWritten());
 });
 
 self.addEventListener('activate', (event) => {
@@ -33,28 +60,24 @@ self.addEventListener('fetch', (event) => {
  * @param  {Request} request
  * @return {Promise} A Promise that resolves to a Response object.
  */
- function fetchCachePriority(cacheName, request) {
-     console.info('Looking for cached data');
+function fetchCachePriority(cacheName, request) {
+    let requestClone = request.clone();
 
-     // check the cachestorage for a match
-     return caches.match(request)
-         .then((cachedResponse) => {
-             if (cachedResponse) {
-                 console.info('Found cached data');
-                 return cachedResponse;
-             }
+    return caches.match(request)
+        .then((cachedResponse) => {
+            if (cachedResponse) {
+                return cachedResponse;
+            }
 
-             console.info('Data not found in cache, fetching from network');
+            return fetchAndCache(cacheName, requestClone);
+        });
 
-             return fetchAndCache(cacheName, request);
-         });
+}
 
- }
-
- function fetchAndCache(cacheName, request) {
-     return fetch(request.clone())
-         .then((response) => cacheResponse(cacheName, request, response));
- }
+function fetchAndCache(cacheName, request) {
+    return fetch(request)
+        .then((response) => cacheResponse(cacheName, request, response));
+}
 
 /**
  * @param {string}   cacheName
@@ -62,10 +85,13 @@ self.addEventListener('fetch', (event) => {
  * @param {Response} response
  */
 function cacheResponse(cacheName, request, response) {
+    // We need to clone the response too, as we will use it more than once.
+    let responseClone = response.clone();
+
     console.info('Caching', request.url, 'in', cacheName);
 
     caches.open(cacheName)
-        .then((cache) => cache.put(request, response.clone()));
+        .then((cache) => cache.put(request, responseClone));
 
     return response;
 }

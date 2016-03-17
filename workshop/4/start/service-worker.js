@@ -34,10 +34,10 @@ self.addEventListener('fetch', (event) => {
  * @return {Promise} A Promise that resolves to a Response object.
  */
 function fetchCachePriority(cacheName, request) {
-    let requestClone = request.clone();
-
     // if cached version exists, serve it's response
     // else fetch the remote version, cache it and serve it's response
+
+    // remember, if you need to use a request or a response more than once, clone it first.
 }
 
 /**
@@ -47,13 +47,10 @@ function fetchCachePriority(cacheName, request) {
  * @return {Response} The response object we passed in
  */
 function cacheResponse(cacheName, request, response) {
-    // We need to clone the response too, as we will use it more than once.
-    let responseClone = response.clone();
-
     console.info('Caching', request.url, 'in', cacheName);
 
     caches.open(cacheName)
-        .then((cache) => cache.put(request, responseClone));
+        .then((cache) => cache.put(request, response.clone()));
 
     return response;
 }

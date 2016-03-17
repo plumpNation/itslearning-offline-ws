@@ -42,11 +42,7 @@ self.addEventListener('fetch', (event) => {
  * @return {Promise} A Promise that resolves to a Response object.
  */
 function fetchAndCache(cacheName, request) {
-    // Clone the request; we should only use each instance once
-    let requestClone = request.clone();
-
-    // by returning the fetch().then() chain we are returning a Promise object
-    return fetch(requestClone)
+    return fetch(request.clone())
         .then((response) => cacheResponse(cacheName, request, response));
 }
 
@@ -57,13 +53,10 @@ function fetchAndCache(cacheName, request) {
  * @return {Response} The response object we passed in
  */
 function cacheResponse(cacheName, request, response) {
-    // We need to clone the response too, as we will use it more than once.
-    let responseClone = response.clone();
-
     console.info('Caching', request.url, 'in', cacheName);
 
     caches.open(cacheName)
-        .then((cache) => cache.put(request, responseClone));
+        .then((cache) => cache.put(request, response.clone()));
 
     // cache.put is asynchronous but we don't need to wait for the cache to be written,
     // to response, so we can return the response straight away.

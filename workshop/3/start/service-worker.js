@@ -27,5 +27,8 @@ self.addEventListener('fetch', (event) => {
     }
 
     // if cached version exists, respond with it
+
     // else fetch the request, cache it and respond with the response
+
+    // event.respondWith(Response or Promise that resolves to Response);
 });

@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-let version = 'v1-workshop-exercise-3';
+let version = 'v1-cache-api';
 
 console.info('Executing service worker for', version);
 
@@ -19,12 +19,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    let newsDataResponse,
-        requestPath = event.request.url;
-
     console.info(version, 'requesting', event.request.url);
 
-    if (!requestPath.endsWith('news.json')) {
+    if (!event.request.url.endsWith('news.json')) {
         // returning undefined will not change the response or request.
         return;
     }
@@ -41,20 +38,30 @@ self.addEventListener('fetch', (event) => {
  */
 function fetchAndCache(cacheName, request) {
     // Clone the request; we should only use each instance once
-    let requestClone = event.request.clone();
+    let requestClone = request.clone();
 
     // by returning the fetch().then() chain we are returning a Promise object
     return fetch(requestClone)
         .then((response) => {
-            // We need to clone the response too, as we will use it more than once.
-            let responseClone = response.clone();
-
-            // caches.open
-            caches.open(cacheName)
-                .then((cache) => cache.put(request, responseClone);
+            cacheResponse(cacheName, request, response);
 
             // cache.put is asynchronous but we don't need to wait for the cache to be written,
             // to response, so we can return the response straight away.
             return response;
         });
+}
+
+/**
+ * @param {string}   cacheName
+ * @param {Request}  request
+ * @param {Response} response
+ */
+function cacheResponse(cacheName, request, response) {
+    // We need to clone the response too, as we will use it more than once.
+    let responseClone = response.clone();
+
+    console.info('Caching', request.url, 'in', cacheName);
+
+    caches.open(cacheName)
+        .then((cache) => cache.put(request, responseClone));
 }

@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-let version = 'v1-workshop-exercise-2';
+let version = 'v1-service-worker-lifecycle';
 
 console.info('Executing service worker for', version);
 

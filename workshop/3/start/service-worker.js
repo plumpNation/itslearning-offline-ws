@@ -6,7 +6,7 @@
 
 // Adjust this version and watch the effect it has on the workers when you refresh, then
 // close the browser tab.
-let version = 'v1-workshop-exercise-3';
+let version = 'v1-cache-api';
 
 console.info('Executing service worker for', version);
 
@@ -19,11 +19,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    let requestPath = event.request.url;
-
     console.info(version, 'requesting', event.request.url);
 
-    if (!requestPath.endsWith('news.json')) {
+    if (!event.request.url.endsWith('news.json')) {
         // returning undefined will not change the response or request.
         return;
     }

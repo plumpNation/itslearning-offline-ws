@@ -1,4 +1,4 @@
-let version = 'v1-caching-page-assets',
+let version = 'v1-retrieving-cached-assets',
 
     // The files we want to cache
     whitelistURIs = [
@@ -27,7 +27,6 @@ self.addEventListener('install', (event) => {
             .then((cache) => cache.addAll(whitelistURIs));
     };
 
-
     console.info(version, 'installing');
 
     event.waitUntil(cachesAreWritten());
@@ -40,8 +39,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request.url);
 
-    if (!event.request.url.endsWith('news.json')) {
-        // returning undefined will not change the response or request.
+    if (!event.request.url.endsWith('news.json') ||
+        !inWhitelist(event.request.url)
+    ) {
         return;
     }
 
@@ -52,6 +52,16 @@ self.addEventListener('fetch', (event) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////  HELPERS  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param  {string} requestURI
+ * @return {boolean} true if the requestURI ends with anything in the whitelist.
+ */
+function inWhitelist(requestURI) {
+    return whitelistURIs.some((whitelistURI) => {
+        return requestURI.endsWith(whitelistURI);
+    });
+}
 
 /**
  * Fetches a request, caches the response and returns the original response

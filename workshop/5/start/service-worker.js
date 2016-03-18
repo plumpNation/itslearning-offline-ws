@@ -37,6 +37,15 @@ self.addEventListener('fetch', (event) => {
 ///////////////////////////////////////////  HELPERS  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @param  {string} requestURI
+ * @return {boolean} true if the requestURI ends with anything in the whitelist.
+ */
+function inWhitelist(requestURI) {
+    return whitelistURIs.some((whitelistURI) => {
+        return requestURI.endsWith(whitelistURI);
+    });
+}
 
 /**
  * Fetches a request, caches the response and returns the original response

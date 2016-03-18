@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    position: relative;
+    min-height: 100%;
+}
+
 a {
     text-decoration: none;
     color: rgb(61, 146, 201);
@@ -23,6 +29,7 @@ h3 {
     max-width: 100%;
     height: auto;
 }
+
 
 #layout {
     padding: 0;

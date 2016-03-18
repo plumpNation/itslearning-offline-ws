@@ -7,13 +7,21 @@ let version = 'v1-background-sync',
         'css/pure/grids-responsive-min.css',
         'css/news.css',
         'css/components/network-indicator.css',
-        'lib/news-helper.js',
-        'lib/service-worker-helper.js',
-        'lib/network-indicator.js',
+        'lib/helpers/news-helper.js',
+        'lib/helpers/service-worker-helper.js',
+        'lib/components/network-indicator.js',
+        'lib/components/news-form.js',
         'app.js',
+
         'news.json',
+
         'img/kingsman-logo.png',
-        'img/avatars/gavin.png'
+
+        'img/avatars/gavin.png',
+        'img/avatars/andrew.png',
+        'img/avatars/ericf.png',
+        'img/avatars/reid.png',
+        'img/avatars/tilo.png'
     ];
 
 console.info('Executing service worker for', version);

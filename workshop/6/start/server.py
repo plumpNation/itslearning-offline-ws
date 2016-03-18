@@ -31,7 +31,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         if (self.path.endswith('news.json')):
-            database['news'].append({
+            database['news'].insert(0, {
                 "headline": "This is your data",
                 "body": "It comes from a flat file in the home folder",
                 "author": "Gavin King",

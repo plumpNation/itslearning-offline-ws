@@ -39,7 +39,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request.url);
 
-    if (!event.request.url.endsWith('news.json') ||
+    if (!event.request.url.endsWith('news.json') &&
         !inWhitelist(event.request.url)
     ) {
         return;

@@ -1,0 +1,12 @@
+.add-button {
+    background-image: url('../../img/components/add-button.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 0;
+    bottom: 2rem;
+    height: 5rem;
+    position: fixed;
+    text-indent: -99999px;
+    right: 2rem;
+    width: 5rem;
+}

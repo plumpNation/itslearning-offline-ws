@@ -1,0 +1,30 @@
+.is-offline,
+.is-online {
+    color: white;
+    display: none;
+    text-align: center;
+    margin: 0;
+    font-size: .75rem;
+}
+
+#network-indicator {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#network-indicator.online {
+    background: green;
+}
+
+#network-indicator.offline {
+    background: red;
+}
+
+#network-indicator.online .is-online {
+    display: block;
+}
+
+#network-indicator.offline .is-offline {
+    display: block;
+}

@@ -1,0 +1,10 @@
+{
+    "news": [
+        {
+            "headline": "This is your data",
+            "body": "It comes from a flat file in the home folder",
+            "author": "Gavin King",
+            "avatar": "gavin"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
 let version = 'v1-caching-page-assets',
 
     // The files we want to cache
-    whitelist = [
-        './',
+    whitelistURIs = [
+        '/',
         'css/pure/pure-min.css',
         'css/pure/grids-responsive-min.css',
         'css/news.css',
@@ -24,7 +24,7 @@ self.addEventListener('install', (event) => {
 
         return caches
             .open(version)
-            .then((cache) => cache.addAll(whitelist));
+            .then((cache) => cache.addAll(whitelistURIs));
     };
 
 

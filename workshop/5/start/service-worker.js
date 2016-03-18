@@ -1,8 +1,8 @@
 let version = 'v1-caching-page-assets',
 
     // The files we want to cache
-    whitelist = [
-        './'
+    whitelistURIs = [
+        '/'
         // add your whitelist items here
     ];
 
@@ -56,7 +56,6 @@ function fetchCachePriority(cacheName, request) {
 
             return fetchAndCache(cacheName, requestClone);
         });
-
 }
 
 function fetchAndCache(cacheName, request) {

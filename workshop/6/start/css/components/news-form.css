@@ -1,8 +1,10 @@
 #news-form {
     background: white;
     box-shadow: 0px 3px 26px -4px rgba(0,0,0,0.75);
-    width: 40rem;
+    left: 50%;
     padding: 2rem;
     position: absolute;
-    transform: translate(75%, -50%);
+    top: 0;
+    transform: translateX(-50%);
+    width: 40rem;
 }

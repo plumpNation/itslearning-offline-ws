@@ -211,8 +211,3 @@ function fallbackToCache(request, cacheName) {
         return CacheHelper.GET(request).from(cacheName);
     }
 }
-
-setAbsoluteWhitelist = function (cacheKeys) {
-    console.log('setting keys', cacheKeys);
-    absoluteWhitelist = cacheKeys;
-}

@@ -9,7 +9,7 @@
 
     window.onload = init;
 
-    let getStuff = function (id) {
+    let getAll = function (id) {
         let DBOpenRequest = indexedDB.open(dbName, dbVersion);
 
         DBOpenRequest.onsuccess = function (event) {
@@ -27,8 +27,24 @@
         };
     };
 
+    let getOne = function () {
+        let DBOpenRequest = indexedDB.open(dbName, dbVersion);
+
+        DBOpenRequest.onsuccess = function (event) {
+            let transaction = createTransaction(event.target.result),
+                objectStore = transaction.objectStore(objectStoreName),
+                objectId    = parseInt(document.getElementById('id-to-get').value, 10),
+                request     = objectStore.get(objectId);
+
+            request.onsuccess = function (event) {
+                console.log(event.target.result);
+            };
+        };
+    };
+
     window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('run-code').addEventListener('click', () => getStuff());
+        document.getElementById('get-all').addEventListener('click', () => getAll());
+        document.getElementById('get-one').addEventListener('click', () => getOne());
     });
 
     function init() {

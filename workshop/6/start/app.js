@@ -1,14 +1,10 @@
-(function () {
+/**
+ * The controller for the 'news app' example
+ */
+(function (window) {
     'use strict';
 
-    let loadAndShowNews = function (event) {
-            NewsHelper.GET('news.json')
-                .then((response) => NewsHelper.populateDOM('news-items', response.news));
-
-            setupAddNews();
-        },
-
-        setupAddNews = function () {
+    let setupAddNews = function () {
             let addNewsButton = document.getElementById('add-news');
 
             window.addEventListener('news-submitted', (event) => {
@@ -26,12 +22,20 @@
             });
         },
 
+        loadAndShowNews = function (event) {
+            NewsHelper.GET('news.json')
+                .then((response) => NewsHelper.populateDOM('news-items', response.news));
+
+            setupAddNews();
+        },
+
         init = function () {
             new NetworkIndicator({'target': 'network-indicator'});
-            // new ServiceWorkerHelper('service-worker.js', {'scope': './'});
+
+            navigator.serviceWorker.register('service-worker.js');
 
             loadAndShowNews();
         };
 
     document.addEventListener('DOMContentLoaded', init);
-}());
+}(window));

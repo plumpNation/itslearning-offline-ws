@@ -14,7 +14,7 @@
         init = function () {
             loadAndShowNews();
             new NetworkIndicator({'target': 'network-indicator'});
-            new ServiceWorkerHelper('service-worker.js', {'scope': './'});
+            navigator.serviceWorker.register('service-worker.js');
         };
 
     document.addEventListener('DOMContentLoaded', init);

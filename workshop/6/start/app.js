@@ -1,11 +1,10 @@
 (function () {
     'use strict';
 
-    let loadAndShowNews = function () {
-            let newsHelper = new NewsHelper({
-                'target' : 'news-items',
-                'service': 'news.json'
-            });
+    let newsHelper,
+
+        loadAndShowNews = function (event) {
+
 
             newsHelper.GET()
                 .then((response) => newsHelper.populateDOM(response.news));
@@ -22,7 +21,17 @@
         },
 
         init = function () {
+            newsHelper = new NewsHelper({
+                'target' : 'news-items',
+                'service': 'news.json'
+            });
+
             loadAndShowNews();
+
+            window.addEventListener('updated', (event) => {
+                newsHelper.prepend(event.detail);
+            });
+
             new NetworkIndicator({'target': 'network-indicator'});
             // new ServiceWorkerHelper('service-worker.js', {'scope': './'});
 

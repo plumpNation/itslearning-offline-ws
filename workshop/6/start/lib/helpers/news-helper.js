@@ -46,6 +46,13 @@
         target.insertAdjacentHTML('afterend', newsElements.join(''));
     };
 
+    NewsHelper.prototype.prepend = function (newsItem) {
+        let newsElement = this.toArticles(newsItem),
+            target      = document.getElementById(this.options.target);
+
+        target.insertAdjacentHTML('afterbegin', newsElement);
+    };
+
     NewsHelper.prototype.GET = function () {
         if (!this.options.service) {
             return new Error('Service URI missing from constuctor options');

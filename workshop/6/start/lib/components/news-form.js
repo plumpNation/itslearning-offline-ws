@@ -57,23 +57,26 @@
         document.getElementById('news-form').addEventListener('submit', (event) => {
             let form = document.getElementById('news-form'),
 
+                data = {
+                    'headline': form.headline.value,
+                    'body'    : form.body.value,
+                    'author'  : form.author.value,
+                    'avatar'  : form.avatar.value
+                },
+
                 options = {
                     method: 'POST',
                     headers: new Headers({
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }),
-                    body: JSON.stringify({
-                        'headline': form.headline.value,
-                        'body'    : form.body.value,
-                        'author'  : form.body.value,
-                        'avatar'  : form.avatar.value
-                    })
+                    body: JSON.stringify(data)
                 };
 
             event.preventDefault();
 
             fetch('news.json', options)
+                .then(() => window.dispatchEvent(new CustomEvent('updated', {'detail': data})))
                 .then(() => document.body.removeChild(form));
         });
     }

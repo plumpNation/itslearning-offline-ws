@@ -1,13 +1,35 @@
 (function () {
     'use strict';
 
-    let dbName          = 'offline-example-db',
+    let dbName          = 'v1-indexeddb-example',
         dbVersion       = 1,
         objectStoreName = 'news';
 
     console.info('IndexedDB example: running');
 
     window.onload = init;
+
+    let getStuff = function (id) {
+        let DBOpenRequest = indexedDB.open(dbName, dbVersion);
+
+        DBOpenRequest.onsuccess = function (event) {
+            let transaction = createTransaction(event.target.result),
+                objectStore = transaction.objectStore(objectStoreName),
+                request     = objectStore.getAll();
+
+            request.onsuccess = function (event) {
+                if (event.target.result.length) {
+                    console.group('results from db:');
+                    event.target.result.map((item) => console.log(item));
+                    console.groupEnd();
+                }
+            };
+        };
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('run-code').addEventListener('click', () => getStuff());
+    });
 
     function init() {
         let DBOpenRequest = indexedDB.open(dbName, dbVersion);

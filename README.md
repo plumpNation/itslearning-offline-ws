@@ -1,8 +1,8 @@
 itslearning offline workshop
 ============================
 
-Before you start, you should know that this set of examples is meant to be a starting point and
-not an exhaustive solution to all your online woes.
+Before you start, you should know that the set of examples is meant to be accompanying material and
+the actual workshop files are in the workshop folder.
 
 It will cover a few technologies that are associated with newer browser technologies that can be
 put to use to provide a user with a better offline experience and less network traffic by utilising
@@ -12,7 +12,8 @@ Not all of these techniques are available in all browsers at this time, so for n
 
 This was developed on top of Chrome 49. I would use that version or higher for the time being.
 
-**Always have your console open and your cache turned off.**
+**Always have your console open and your cache turned off.** It is best to deal with one layer of
+caching at a time ;)
 
 ## What the hell is going on in here?
 If you have not been working with javascript for a while, some of the code or patterns in these
@@ -41,36 +42,37 @@ and more informally [this article](http://www.html5rocks.com/en/tutorials/es6/pr
  * [Higher order functions](https://medium.com/humans-create-software/a-dirt-simple-introduction-to-higher-order-functions-in-javascript-b33bf9e19056#.dmal6ulvs)
 
 ## Requirements
-You should have a local web server set up, maybe
+Even if you have a local web server set up I would advise to use the
+[Python SimpleHTTPServer](http://www.linuxjournal.com/content/tech-tip-really-simple-http-server-python)
 
-* Apache
-* Nginx
-* [Python server](http://www.linuxjournal.com/content/tech-tip-really-simple-http-server-python)
+It's cross platform, is easy to install (comes with python), requires no configuration and gives a
+nice console output to watch.
 
-I recommend the Python server, it's cross platform, is easy to install (comes with python),
-requires no configuration and gives a nice console output to watch.
+Run this command in the root folder of this repository so that your service worker url changes when
+you open a different folder.
 
 ```shell
 # This command serves the current directory on 0.0.0.0:8000
-python -m SimpleHTTPServer 8000
+python -m SimpleHTTPServer
+
+# This command serves the current directory on 0.0.0.0:8001
+python -m SimpleHTTPServer 8001
 ```
 
-You can access the served directory at localhost:8000 or 127.0.0.1:8000 to browse the examples.
+You can access the served directory at localhost:8000 or 127.0.0.1:8000.
 
 You can use **localhost** to develop service workers locally on http, unless you have a valid TLS
 certificate for the domain.
 
 ## Setup
-1. Clone repo and createa new git working branch.
+1. Clone repo and create a new git working branch.
 2. Open in your favourite web editor (for HTML, CSS, javascript).
-3. Ensure your webserver is serving the directory.
-4. Browse to localhost:8000
-
-You may get a message telling you that a script couldn't find service worker compatibility in your
-current browser. Download the latest Chrome and you should be fine.
+3. Start the python server
+4. Ensure your webserver is serving the root directory.
+5. Browse to localhost:8000
 
 ## Learning instructions
-There is a local README in each of the example folders. You should read that.
+There is a local README in each of the example folders.
 
 ### Subjects covered
 

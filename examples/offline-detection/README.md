@@ -1,4 +1,4 @@
-0. Offline detection
+Offline detection
 ===============================
 
 ## What is in the page?
@@ -27,3 +27,8 @@ window.addEventListener('online', function (e) {
     alert('online');
 }, false);
 ```
+
+## Important considerations
+Just because a user can't hit your webserver doesn't mean they are offline.
+
+It is not therefore a foolproof way of knowing when to update assets etc.

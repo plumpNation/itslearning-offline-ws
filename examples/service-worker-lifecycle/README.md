@@ -1,5 +1,5 @@
-1. ServiceWorker Lifecycle
-==========================
+ServiceWorker Lifecycle
+=======================
 
 ## What is in the folder?
 1. An application script to register the ServiceWorker.
@@ -63,9 +63,10 @@ The service worker installation failed.
 
 If a console is not open for the ServiceWorker, it's logs will go to the browser console.
 
-## Original
+## To test
 1. Open a new browser tab.
-2. Open the developer tools.
+2. Open the developer tools resource tab.
+3. Click on
 3. Open examples/1 in the browser.
 4. Observe the console information.
  * Installation

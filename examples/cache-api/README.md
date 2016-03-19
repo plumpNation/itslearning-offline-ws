@@ -1,4 +1,4 @@
-3. CacheAPI example
+CacheAPI example
 ===================
 
 ## What's in the folder?
@@ -46,9 +46,6 @@ Read about it [here](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 Request and Response are interfaces on the Fetch API
 * [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
 * [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)
-
-### It's not supported by crappy browsers
-Correct, but it's nice to learn about it and it is a very simple tool.
 
 ### Cloning
 If you are dealing with Request and Response objects, you may come across the 'already read' error.

@@ -1,11 +1,10 @@
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 import SocketServer
 import json
-import logging
 import sys
 from urlparse import parse_qs
 
-database = json.loads(open('database.json').read());
+database = json.loads(open('fixture.json').read());
 
 if sys.argv[1:]:
     port = int(sys.argv[1])
@@ -33,15 +32,11 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         if (self.path.endswith('news.json')):
 
-            length = int(self.headers['content-length'])
-            postvars = parse_qs(self.rfile.read(length), keep_blank_values=1)
+            self.data_string = self.rfile.read(int(self.headers['Content-Length']))
 
-            database['news'].insert(0, {
-                'headline': postvars['headline'][0],
-                'body': postvars['body'][0],
-                'author': postvars['author'][0],
-                'avatar': postvars['avatar'][0]
-            });
+            data = json.loads(self.data_string)
+
+            database['news'].insert(0, data);
 
             self.sendDatabaseJSON()
 

@@ -24,6 +24,7 @@
 
                     <fieldset class="pure-group">
                         <input
+                            id="headline"
                             name="headline"
                             class="pure-input-1-2"
                             placeholder="Headline">
@@ -51,18 +52,29 @@
 
         document.body.insertAdjacentHTML('beforeend', template);
 
-        $('[name="headline"]').focus();
+        document.getElementById('headline').focus();
 
-        element = $('form#news-form');
+        document.getElementById('news-form').addEventListener('submit', (event) => {
+            let form = document.getElementById('news-form'),
 
-        element.on('submit', (event) => {
+                options = {
+                    method: 'POST',
+                    headers: new Headers({
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }),
+                    body: JSON.stringify({
+                        'headline': form.headline.value,
+                        'body'    : form.body.value,
+                        'author'  : form.body.value,
+                        'avatar'  : form.avatar.value
+                    })
+                };
+
             event.preventDefault();
 
-            $.post('./news.json', element.serialize(), (response) => {
-                console.log(response);
-            });
-
-            element.remove();
+            fetch('news.json', options)
+                .then(() => document.body.removeChild(form));
         });
     }
 

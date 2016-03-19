@@ -36,8 +36,9 @@ h3 {
 }
 
 .header {
-    text-align: center;
+    text-align: right;
     top: auto;
+    padding-right: 1rem;
     margin: 3em auto;
 }
 
@@ -181,6 +182,7 @@ h3 {
         padding: 2rem;
         position: absolute;
         margin: 0;
+        text-align: center;
         width: 100%;
     }
 

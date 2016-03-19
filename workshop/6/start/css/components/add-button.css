@@ -1,15 +1,55 @@
 .add-button {
-    background-image: url('../../img/components/add-button.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 5rem 5rem;
-    border: 0;
-    border-radius: 5rem;
-    bottom: 2rem;
-    box-shadow: 0px 3px 26px -4px rgba(0,0,0,0.75);
-    height: 4rem;
-    position: fixed;
-    text-indent: -99999px;
-    right: 2rem;
-    width: 4rem;
+    animation           : zoomIn;
+    animation-duration  : .5s;
+
+    background-image    : url('../../img/components/add-button.png');
+    background-position : center;
+    background-repeat   : no-repeat;
+    background-size     : 5rem 5rem;
+    border              : 0;
+    border-radius       : 5rem;
+    bottom              : 2rem;
+    box-shadow          : 0px 3px 26px -4px rgba(0,0,0,0.75);
+    height              : 4rem;
+    position            : fixed;
+    text-indent         : -99999px;
+    right               : 2rem;
+    width               : 4rem;
+}
+
+.form-open .add-button {
+    animation           : zoomOut;
+    animation-duration  : .5s;
+    animation-fill-mode : forwards;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale3d(.3, .3, .3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomOut {
+    from {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+        transform: scale3d(.3, .3, .3);
+    }
+
+    to {
+        opacity: 0;
+    }
 }

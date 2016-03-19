@@ -10,6 +10,8 @@
         }
 
         this.renderTo(document.body, (form) => {
+            document.body.classList.add('form-open');
+
             form.getElementsByTagName('input')[0].focus();
 
             form.addEventListener('submit', this.onSubmit);
@@ -27,7 +29,9 @@
         let formContainer = document.getElementById('news-form-container');
 
         formContainer.removeEventListener('click', teardown);
+
         document.body.removeChild(formContainer);
+        document.body.classList.remove('form-open')
     }
 
     NewsForm.prototype.onSubmit = function (event) {

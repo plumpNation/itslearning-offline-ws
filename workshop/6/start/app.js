@@ -4,14 +4,24 @@
     let newsHelper,
 
         loadAndShowNews = function (event) {
-
+            newsHelper = new NewsHelper({
+                'target' : 'news-items',
+                'service': 'news.json'
+            });
 
             newsHelper.GET()
                 .then((response) => newsHelper.populateDOM(response.news));
+
+            window.addEventListener('news-submitted', (event) => {
+                newsHelper.POST(event.detail.data)
+                    .then((response) => newsHelper.prepend(event.detail.data));
+            });
         },
 
         setupAddNews = function () {
-            document.getElementById('add-news').addEventListener('click', (event) => {
+            let addButton = document.getElementById('add-news')
+
+            addButton.addEventListener('click', (event) => {
                 let newsForm = document.getElementById('add-news-form');
 
                 if (!newsForm) {
@@ -21,16 +31,7 @@
         },
 
         init = function () {
-            newsHelper = new NewsHelper({
-                'target' : 'news-items',
-                'service': 'news.json'
-            });
-
             loadAndShowNews();
-
-            window.addEventListener('updated', (event) => {
-                newsHelper.prepend(event.detail);
-            });
 
             new NetworkIndicator({'target': 'network-indicator'});
             // new ServiceWorkerHelper('service-worker.js', {'scope': './'});

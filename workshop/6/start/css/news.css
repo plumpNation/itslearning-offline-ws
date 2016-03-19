@@ -190,3 +190,8 @@ h3 {
         bottom: 0.5rem;
     }
 }
+
+.news-item {
+    animation: fadeInGrow;
+    animation-duration: .75s;
+}

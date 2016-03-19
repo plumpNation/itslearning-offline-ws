@@ -22,13 +22,13 @@
             this.options = options;
         };
 
-    NewsHelper.prototype.toArticles = function (newsItem) {
-        let avatarSrc = `img/avatars/${newsItem.avatar}.png`,
-            avatarAlt = `${newsItem.author}'s avatar`;
-
-        return `<article class="news-item">
+    NewsHelper.prototype.toArticle = function (newsItem) {
+        return `<article class="news-item anim-start">
             <header class="news-header">
-                <img class="news-avatar" alt="${avatarAlt}" src="${avatarSrc}">
+                <img
+                    class="news-avatar"
+                    alt="${newsItem.author}'s avatar"
+                    src="img/avatars/${newsItem.avatar}.png">
                 <h1 class="news-item-headline">${newsItem.headline}</h1>
                 <p class="news-meta">By ${newsItem.author}</p>
             </header>
@@ -40,14 +40,14 @@
     };
 
     NewsHelper.prototype.populateDOM = function (newsItems) {
-        let newsElements = newsItems.map(this.toArticles),
+        let newsElements = newsItems.map(this.toArticle),
             target       = document.getElementById(this.options.target);
 
         target.insertAdjacentHTML('afterend', newsElements.join(''));
     };
 
     NewsHelper.prototype.prepend = function (newsItem) {
-        let newsElement = this.toArticles(newsItem),
+        let newsElement = this.toArticle(newsItem),
             target      = document.getElementById(this.options.target);
 
         target.insertAdjacentHTML('afterbegin', newsElement);
@@ -59,6 +59,19 @@
         }
 
         return fetch(this.options.service).then((news) => news.json());
+    };
+
+    NewsHelper.prototype.POST = function (data) {
+        let options = {
+            method: 'POST',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(data)
+        };
+
+        return fetch('news.json', options);
     };
 
     window.NewsHelper = NewsHelper;

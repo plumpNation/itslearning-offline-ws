@@ -9,76 +9,92 @@
             return new NewsForm();
         }
 
-        render();
+        this.renderTo(document.body, (form) => {
+            form.getElementsByTagName('input')[0].focus();
+
+            form.addEventListener('submit', this.onSubmit);
+            form.addEventListener('click', (event) => event.stopPropagation());
+
+            setTimeout(function () {
+                let formContainer = document.getElementById('news-form-container');
+
+                formContainer.addEventListener('click', teardown);
+            }, 100);
+        });
     }
 
-    function render() {
+    function teardown() {
+        let formContainer = document.getElementById('news-form-container');
 
-        let element,
-            template =
-                `<form
-                    id="news-form"
-                    method="post"
-                    action="./news.json"
-                    class="pure-form pure-form-aligned">
+        formContainer.removeEventListener('click', teardown);
+        document.body.removeChild(formContainer);
+    }
 
-                    <fieldset class="pure-group">
-                        <input
-                            id="headline"
-                            name="headline"
-                            class="pure-input-1-2"
-                            placeholder="Headline">
+    NewsForm.prototype.onSubmit = function (event) {
+        let form = event.target,
 
-                        <textarea
-                            name="body"
-                            class="pure-input-1-2"
-                            placeholder="Body"></textarea>
-                    </fieldset>
+            data = {
+                'headline': form.headline.value,
+                'body'    : form.body.value,
+                'author'  : form.author.value,
+                'avatar'  : form.avatar.value
+            };
 
-                    <fieldset class="pure-group">
-                        <input name="author" placeholder="Author">
-                        <select name="avatar">
-                            <option>ericf</option>
-                            <option>andrew</option>
-                            <option>reid</option>
-                            <option>tilo</option>
-                            <option>gavin</option>
-                        </select>
-                    </fieldset>
+        event.preventDefault();
 
-                    <button type="submit" class="pure-button pure-button-primary">Submit</button>
-                </form>`;
+        window.dispatchEvent(new CustomEvent('news-submitted', {
+            'detail': {
+                'data': data,
+                'form': form
+            }
+        }));
 
+        teardown();
+    };
 
-        document.body.insertAdjacentHTML('beforeend', template);
+    NewsForm.prototype.getTemplate = function () {
+        return `
+        <section id="news-form-container">
+            <form
+                id="news-form"
+                method="post"
+                action="./news.json"
+                class="pure-form pure-form-aligned anim-start">
 
-        document.getElementById('headline').focus();
+                <fieldset class="pure-group">
+                    <input
+                        name="headline"
+                        class="pure-input-1-2"
+                        placeholder="Headline">
 
-        document.getElementById('news-form').addEventListener('submit', (event) => {
-            let form = document.getElementById('news-form'),
+                    <textarea
+                        name="body"
+                        class="pure-input-1-2"
+                        placeholder="Body"></textarea>
+                </fieldset>
 
-                data = {
-                    'headline': form.headline.value,
-                    'body'    : form.body.value,
-                    'author'  : form.author.value,
-                    'avatar'  : form.avatar.value
-                },
+                <fieldset class="pure-group">
+                    <input name="author" placeholder="Author">
+                    <select name="avatar">
+                        <option>ericf</option>
+                        <option>andrew</option>
+                        <option>reid</option>
+                        <option>tilo</option>
+                        <option>gavin</option>
+                    </select>
+                </fieldset>
 
-                options = {
-                    method: 'POST',
-                    headers: new Headers({
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }),
-                    body: JSON.stringify(data)
-                };
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </form>
+        </section>`;
+    };
 
-            event.preventDefault();
+    NewsForm.prototype.renderTo = function (element, callback) {
+        let template = this.getTemplate();
 
-            fetch('news.json', options)
-                .then(() => window.dispatchEvent(new CustomEvent('updated', {'detail': data})))
-                .then(() => document.body.removeChild(form));
-        });
+        element.insertAdjacentHTML('beforeend', template);
+
+        return callback(document.getElementById('news-form'));
     }
 
     window.NewsForm = NewsForm;

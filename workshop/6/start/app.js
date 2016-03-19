@@ -1,42 +1,36 @@
 (function () {
     'use strict';
 
-    let newsHelper,
+    let loadAndShowNews = function (event) {
+            NewsHelper.GET('news.json')
+                .then((response) => NewsHelper.populateDOM('news-items', response.news));
 
-        loadAndShowNews = function (event) {
-            newsHelper = new NewsHelper({
-                'target' : 'news-items',
-                'service': 'news.json'
-            });
-
-            newsHelper.GET()
-                .then((response) => newsHelper.populateDOM(response.news));
-
-            window.addEventListener('news-submitted', (event) => {
-                newsHelper.POST(event.detail.data)
-                    .then((response) => newsHelper.prepend(event.detail.data));
-            });
+            setupAddNews();
         },
 
         setupAddNews = function () {
-            let addButton = document.getElementById('add-news')
+            let addNewsButton = document.getElementById('add-news');
 
-            addButton.addEventListener('click', (event) => {
+            window.addEventListener('news-submitted', (event) => {
+                NewsHelper.POST('news.json', event.detail)
+                    .then((response) => NewsHelper.prepend('news-items', event.detail));
+            });
+
+            addNewsButton.addEventListener('click', (event) => {
                 let newsForm = document.getElementById('add-news-form');
 
                 if (!newsForm) {
+                    // a NewsForm instance will fire the 'news-submitted' event
                     new NewsForm();
                 }
             });
         },
 
         init = function () {
-            loadAndShowNews();
-
             new NetworkIndicator({'target': 'network-indicator'});
             // new ServiceWorkerHelper('service-worker.js', {'scope': './'});
 
-            setupAddNews();
+            loadAndShowNews();
         };
 
     document.addEventListener('DOMContentLoaded', init);

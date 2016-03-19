@@ -1,28 +1,9 @@
 (function (window) {
     'use strict';
 
-    /**
-     * A small module to help loading and populating the page with news items loaded
-     * from the news.json.
-     *
-     * @param {Object} options
-     * @param {string} options.target The id of the container to put the news items in.
-     * @param {string} options.service The uri to the json news service
-     * @return void
-     */
-    let NewsHelper = function (options) {
-            if (!(this instanceof NewsHelper)) {
-                return new NewsHelper(options);
-            }
+    let NewsHelper = {};
 
-            if (!options || !options.target) {
-                throw new Error('You must provide a target');
-            }
-
-            this.options = options;
-        };
-
-    NewsHelper.prototype.toArticle = function (newsItem) {
+    NewsHelper.toArticle = function (newsItem) {
         return `<article class="news-item anim-start">
             <header class="news-header">
                 <img
@@ -39,29 +20,25 @@
         </article>`;
     };
 
-    NewsHelper.prototype.populateDOM = function (newsItems) {
+    NewsHelper.populateDOM = function (elementId, newsItems) {
         let newsElements = newsItems.map(this.toArticle),
-            target       = document.getElementById(this.options.target);
+            target       = document.getElementById(elementId);
 
         target.insertAdjacentHTML('afterend', newsElements.join(''));
     };
 
-    NewsHelper.prototype.prepend = function (newsItem) {
+    NewsHelper.prepend = function (elementId, newsItem) {
         let newsElement = this.toArticle(newsItem),
-            target      = document.getElementById(this.options.target);
+            target      = document.getElementById(elementId);
 
         target.insertAdjacentHTML('afterbegin', newsElement);
     };
 
-    NewsHelper.prototype.GET = function () {
-        if (!this.options.service) {
-            return new Error('Service URI missing from constuctor options');
-        }
-
-        return fetch(this.options.service).then((news) => news.json());
+    NewsHelper.GET = function (url) {
+        return fetch(url).then((news) => news.json());
     };
 
-    NewsHelper.prototype.POST = function (data) {
+    NewsHelper.POST = function (url, data) {
         let options = {
             method: 'POST',
             headers: new Headers({
@@ -71,7 +48,7 @@
             body: JSON.stringify(data)
         };
 
-        return fetch('news.json', options);
+        return fetch(url, options);
     };
 
     window.NewsHelper = NewsHelper;

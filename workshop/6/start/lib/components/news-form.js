@@ -46,51 +46,46 @@
 
         event.preventDefault();
 
-        window.dispatchEvent(new CustomEvent('news-submitted', {
-            'detail': {
-                'data': data,
-                'form': form
-            }
-        }));
+        window.dispatchEvent(new CustomEvent('news-submitted', {'detail': data}));
 
         teardown();
     };
 
     NewsForm.prototype.getTemplate = function () {
         return `
-        <section id="news-form-container">
-            <form
-                id="news-form"
-                method="post"
-                action="./news.json"
-                class="pure-form pure-form-aligned anim-start">
+            <section id="news-form-container">
+                <form
+                    id="news-form"
+                    method="post"
+                    action="./news.json"
+                    class="pure-form pure-form-aligned anim-start">
 
-                <fieldset class="pure-group">
-                    <input
-                        name="headline"
-                        class="pure-input-1-2"
-                        placeholder="Headline">
+                    <fieldset class="pure-group">
+                        <input
+                            name="headline"
+                            class="pure-input-1-2"
+                            placeholder="Headline">
 
-                    <textarea
-                        name="body"
-                        class="pure-input-1-2"
-                        placeholder="Body"></textarea>
-                </fieldset>
+                        <textarea
+                            name="body"
+                            class="pure-input-1-2"
+                            placeholder="Body"></textarea>
+                    </fieldset>
 
-                <fieldset class="pure-group">
-                    <input name="author" placeholder="Author">
-                    <select name="avatar">
-                        <option>ericf</option>
-                        <option>andrew</option>
-                        <option>reid</option>
-                        <option>tilo</option>
-                        <option>gavin</option>
-                    </select>
-                </fieldset>
+                    <fieldset class="pure-group">
+                        <input name="author" placeholder="Author">
+                        <select name="avatar">
+                            <option>ericf</option>
+                            <option>andrew</option>
+                            <option>reid</option>
+                            <option>tilo</option>
+                            <option>gavin</option>
+                        </select>
+                    </fieldset>
 
-                <button type="submit" class="pure-button pure-button-primary">Submit</button>
-            </form>
-        </section>`;
+                    <button type="submit" class="pure-button pure-button-primary">Submit</button>
+                </form>
+            </section>`;
     };
 
     NewsForm.prototype.renderTo = function (element, callback) {

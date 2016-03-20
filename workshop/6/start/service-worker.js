@@ -1,4 +1,6 @@
-let version = 'v1-background-sync',
+const version = 1,
+
+    SWName  = `v${version}-background-sync`,
 
     // The files we want to cache
     whitelistURIs = [
@@ -8,12 +10,9 @@ let version = 'v1-background-sync',
         'css/news.css',
         'css/components/network-indicator.css',
         'lib/helpers/news-helper.js',
-        'lib/helpers/service-worker-helper.js',
         'lib/components/network-indicator.js',
         'lib/components/news-form.js',
         'app.js',
-
-        'news.json',
 
         'img/kingsman-logo.png',
 
@@ -21,47 +20,96 @@ let version = 'v1-background-sync',
         'img/avatars/andrew.png',
         'img/avatars/ericf.png',
         'img/avatars/reid.png',
-        'img/avatars/tilo.png'
+        'img/avatars/tilo.png',
+
+        'news.json'
     ];
 
-self.importScripts('lib/dexie.js');
+console.info('Executing service worker for', SWName);
 
-console.info('Executing service worker for', version);
+self.importScripts('lib/dexie.js');
 
 self.addEventListener('install', (event) => {
     let cachesAreWritten = function () {
         console.info('adding whitelist to cache');
 
         return caches
-            .open(version)
+            .open(SWName)
             .then((cache) => cache.addAll(whitelistURIs));
     };
 
-    console.info(version, 'installing');
+    console.info(SWName, 'installing');
 
     event.waitUntil(cachesAreWritten());
 });
 
 self.addEventListener('activate', (event) => {
-    console.info(version, 'activating');
+    console.info(SWName, 'activating');
+
+    Dexie.Promise.on('error', (err) => {
+        console.error('Uncaught error:');
+        console.error(err);
+
+        throw new Error(err);
+    });
+
+    Dexie.exists(SWName)
+        .then((exists) => {
+            if (exists) {
+                return;
+            }
+
+            createDB(SWName);
+        });
 });
 
 self.addEventListener('fetch', (event) => {
-    console.info(version, 'requesting', event.request.url);
+    let path   = event.request.url,
+        method = event.request.method;
 
-    if (!event.request.url.endsWith('news.json') &&
-        !inWhitelist(event.request.url)
-    ) {
+    console.info(SWName, 'requesting', path);
+
+    if (path.endsWith('news.json')) {
+        switch (method) {
+            case 'POST':
+                writeToDB(event.request);
+                break;
+
+            case 'GET':
+                let allNews = getAllFromDB()
+                        .then(function (response) {
+                            let json = JSON.stringify({'news': response});
+
+                            return new Response(json);
+                        });
+
+                event.respondWith(allNews);
+                break;
+        }
+
         return;
     }
 
-    // Since we are taking control of the request, we will have to provide a response.
-    event.respondWith(fetchCachePriority(version, event.request));
+    if (inWhitelist(path)) {
+        event.respondWith(fetchCachePriority(SWName, event.request));
+    }
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////  HELPERS  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function writeToDB() {
+    let db = getDB(SWName);
+
+    db.news.add();
+}
+
+function getAllFromDB() {
+    let db = getDB(SWName);
+
+    return db.news.toArray();
+}
 
 /**
  * @param  {string} requestURI
@@ -114,4 +162,32 @@ function cacheResponse(cacheName, request, response) {
         .then((cache) => cache.put(request, responseClone));
 
     return response;
+}
+
+function getDB(dbName) {
+    console.info('setting up db', dbName);
+    // Dexie.delete(dbName);
+
+    let db = new Dexie(dbName);
+
+    db.version(version)
+        .stores({'news': 'id'});
+
+    return db;
+}
+
+function createDB(dbName) {
+    let db = getDB(dbName);
+
+    db.open()
+        .then(() => console.info(SWName, 'database created'))
+        // .then(() => initData(db))
+        // .then(() => console.info(SWName, 'initial data added to database'));
+}
+
+function initData(db) {
+    console.info(SWName, 'initialising db with remote data');
+    return fetch(new Request('news.json'))
+        .then((response) => response.json())
+        .then((json) => db.news.bulkAdd(json.news));
 }

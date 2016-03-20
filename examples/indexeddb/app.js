@@ -131,13 +131,12 @@
         };
     }
 
-    function getOne() {
+    function getOne(objectId) {
         let DBOpenRequest = indexedDB.open(dbName, dbVersion);
 
         DBOpenRequest.onsuccess = function (event) {
-            let db          = event.target.result,
-                objectId    = parseInt(document.getElementById('id-to-get').value, 10),
-                request     = getObjectStore(db, objectStoreName).get(objectId);
+            let db      = event.target.result,
+                request = getObjectStore(db, objectStoreName).get(objectId);
 
             request.onsuccess = function (event) {
                 console.log(event.target.result);
@@ -149,7 +148,11 @@
         window.addEventListener('DOMContentLoaded', () => {
             console.info('setting up UI listeners');
             document.getElementById('get-all').addEventListener('click', () => getAll());
-            document.getElementById('get-one').addEventListener('click', () => getOne());
+            document.getElementById('get-one').addEventListener('click', (event) => {
+                let objectId = parseInt(document.getElementById('id-to-get').value, 10);
+
+                getOne(objectId);
+            });
         });
     }
 }());

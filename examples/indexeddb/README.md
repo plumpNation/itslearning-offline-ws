@@ -18,7 +18,7 @@ If you want to read about the basic concepts behind IndexedDB, you should
 ## What is in the folder?
 1. An HTML page to load the example.
 2. An application to create and populate an IndexedDB.
-3. A data.json file to containing some terribly bad news.
+3. A data.json file containing some terribly bad news.
 
 ## Nice to know about IndexedDB
 * A database is versioned.

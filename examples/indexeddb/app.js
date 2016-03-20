@@ -9,43 +9,7 @@
 
     window.onload = init;
 
-    let getAll = function (id) {
-        let DBOpenRequest = indexedDB.open(dbName, dbVersion);
-
-        DBOpenRequest.onsuccess = function (event) {
-            let transaction = createTransaction(event.target.result),
-                objectStore = transaction.objectStore(objectStoreName),
-                request     = objectStore.getAll();
-
-            request.onsuccess = function (event) {
-                if (event.target.result.length) {
-                    console.group('results from db:');
-                    event.target.result.map((item) => console.log(item));
-                    console.groupEnd();
-                }
-            };
-        };
-    };
-
-    let getOne = function () {
-        let DBOpenRequest = indexedDB.open(dbName, dbVersion);
-
-        DBOpenRequest.onsuccess = function (event) {
-            let transaction = createTransaction(event.target.result),
-                objectStore = transaction.objectStore(objectStoreName),
-                objectId    = parseInt(document.getElementById('id-to-get').value, 10),
-                request     = objectStore.get(objectId);
-
-            request.onsuccess = function (event) {
-                console.log(event.target.result);
-            };
-        };
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('get-all').addEventListener('click', () => getAll());
-        document.getElementById('get-one').addEventListener('click', () => getOne());
-    });
+    setupUI();
 
     function init() {
         let DBOpenRequest = indexedDB.open(dbName, dbVersion);
@@ -55,7 +19,7 @@
         DBOpenRequest.onsuccess       = onDBOpenSuccess;
         DBOpenRequest.onupgradeneeded = onDBUpgradeNeeded;
 
-        // DBOpenRequest.onerror         = onDBOpenError;
+        // DBOpenRequest.onerror      = onDBOpenError;
     };
 
     function onDBOpenSuccess(event) {
@@ -64,10 +28,12 @@
         addData(event.target.result);
     };
 
-    // Change the Database structure
+    /**
+     * This is called when the db version has changed, and allows us to perform cleanup and
+     * migration tasks.
+     */
     function onDBUpgradeNeeded(event) {
-        let objectStore,
-            db = event.target.result;
+        let db = event.target.result;
 
         db.onerror = (event) => console.error('Error loading database');
 
@@ -77,12 +43,15 @@
     };
 
     function setupObjectStore(db) {
-        if (!db.objectStoreNames.contains(objectStoreName)) {
-            let objectStore = db.createObjectStore(objectStoreName, {'keyPath': 'id'});
-
-            console.info('Object store created');
-            createIndexes(objectStore);
+        if (db.objectStoreNames.contains(objectStoreName)) {
+            return;
         }
+
+        let objectStore = db.createObjectStore(objectStoreName, {'keyPath': 'id'});
+
+        console.info('Object store created');
+
+        createIndexes(objectStore);
     }
 
     function createIndexes(objectStore) {
@@ -105,8 +74,7 @@
         fetch(new Request('./data.json'))
             .then((response) => response.json())
             .then((json) => {
-                let transaction = createTransaction(db),
-                    objectStore = transaction.objectStore(objectStoreName);
+                let objectStore = getObjectStore(db, objectStoreName);
 
                 console.info('data.json loaded');
 
@@ -134,5 +102,54 @@
         transaction.onerror    = (err)   => console.error(err);
 
         return transaction;
+    }
+
+    function getObjectStore(db, objectStoreName) {
+        let transaction = createTransaction(db),
+            objectStore = transaction.objectStore(objectStoreName);
+
+        return objectStore;
+    }
+
+    function getAll() {
+        let DBOpenRequest = indexedDB.open(dbName, dbVersion);
+
+        DBOpenRequest.onsuccess = function (event) {
+            let db      = event.target.result,
+                request = getObjectStore(event.target.result, objectStoreName).getAll();
+
+            request.onsuccess = function (event) {
+                if (!event.target.result.length) {
+                    console.warn('no results found');
+                    return;
+                }
+
+                console.group('results from db:');
+                event.target.result.map((item) => console.log(item));
+                console.groupEnd();
+            };
+        };
+    }
+
+    function getOne() {
+        let DBOpenRequest = indexedDB.open(dbName, dbVersion);
+
+        DBOpenRequest.onsuccess = function (event) {
+            let db          = event.target.result,
+                objectId    = parseInt(document.getElementById('id-to-get').value, 10),
+                request     = getObjectStore(db, objectStoreName).get(objectId);
+
+            request.onsuccess = function (event) {
+                console.log(event.target.result);
+            };
+        };
+    }
+
+    function setupUI() {
+        window.addEventListener('DOMContentLoaded', () => {
+            console.info('setting up UI listeners');
+            document.getElementById('get-all').addEventListener('click', () => getAll());
+            document.getElementById('get-one').addEventListener('click', () => getOne());
+        });
     }
 }());

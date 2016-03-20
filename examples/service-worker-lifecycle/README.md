@@ -56,41 +56,27 @@ The service worker installation failed.
 * fetch    - A request was made, and the service worker heard it.
 
 ## The console
-1. Open DT:Resources->Service Workers view and take a look at your worker.
- * Open a console for your ServiceWorker.
-2. Refresh the page.
- * The ServiceWorker logs are now limited to it's own console
+Open DT:Resources->Service Workers view and take a look at your worker.
+ * Open a console for your ServiceWorker by clicking 'inspect'.
 
 If a console is not open for the ServiceWorker, it's logs will go to the browser console.
 
 ## To test
 1. Open a new browser tab.
-2. Open the developer tools resource tab.
-3. Click on
-3. Open examples/1 in the browser.
-4. Observe the console information.
+2. Open the developer tools 'Resource' tab.
+3. Open `examples/service-worker-lifecycle` in the browser.
+ * You should see the service worker in the 'active' tab under ServiceWorkers now.
+4. Click the 'inspect' link in the service worker info.
+5. Observe the console information.
  * Installation
  * Activation
-5. Refresh the page
-6. Observe again.
+6. Refresh the page
+7. Observe again.
  * Fetching
 
-## After alteration
-1. Open DT:Resources->Service Workers view and take a look at your worker.
- * Open a console for your ServiceWorker.
-2. Refresh the page.
- * The ServiceWorker logs are now limited to it's own console
+If you make a change in the service worker now, without causing an error and refresh the page
+you will see (in the 'Resource' tab) that the original service worker is still handling the
+requests, calling it's fetch callback.
 
-3. Modify the version number.
-4. Refresh the browser.
-
-1. View example1.html page (running in your local webserver) in the browser.
-2. Use service workers to cache the page assets to make them available offline.
-3. Use DT:Resources->Service Worker to observe the service worker and cache storage.
-4. Intercept network requests for the assets and serve from the cache if they exist.
-5. Learn about cloning network requests and why you need to do them.
-6. Make a change in the service worker.
- * Watch the state of that worker go Installed->Waiting
- * Make a listener for the activate event.
- * Close the page.
- * Look for the activate event logging.
+The modified service worker is sat in the 'waiting' tab, and will not activate until the tab closes
+or the service worker is manually deleted in the developer tools.

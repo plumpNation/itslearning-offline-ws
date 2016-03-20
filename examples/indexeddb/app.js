@@ -1,4 +1,4 @@
-(function () {
+(function (indexedDB) {
     'use strict';
 
     let dbName          = 'v1-indexeddb-example',
@@ -144,15 +144,29 @@
         };
     }
 
+    function deleteDB(dbName) {
+        let request = indexedDB.deleteDatabase(dbName);
+
+        request.onsuccess = function () {
+            console.log('Database deleted successfully');
+        };
+
+        request.onerror = function () {
+            console.error('Database did not delete');
+        };
+    }
+
     function setupUI() {
         window.addEventListener('DOMContentLoaded', () => {
-            console.info('setting up UI listeners');
+            document.getElementById('delete-db').addEventListener('click', () => deleteDB(dbName));
+
             document.getElementById('get-all').addEventListener('click', () => getAll());
-            document.getElementById('get-one').addEventListener('click', (event) => {
+
+            document.getElementById('get-one').addEventListener('click', () => {
                 let objectId = parseInt(document.getElementById('id-to-get').value, 10);
 
                 getOne(objectId);
             });
         });
     }
-}());
+}(window.indexedDB));

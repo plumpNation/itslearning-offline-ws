@@ -24,6 +24,8 @@ let version = 'v1-background-sync',
         'img/avatars/tilo.png'
     ];
 
+self.importScripts('lib/dexie.js');
+
 console.info('Executing service worker for', version);
 
 self.addEventListener('install', (event) => {

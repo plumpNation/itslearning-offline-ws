@@ -5,16 +5,22 @@ const version = 1,
     // The files we want to cache
     whitelistURIs = [
         '/',
+        'app.js',
+
+        'css/animations.css',
         'css/pure/pure-min.css',
         'css/pure/grids-responsive-min.css',
         'css/news.css',
         'css/components/network-indicator.css',
-        'lib/helpers/news-helper.js',
+        'css/components/add-button.css',
+        'css/components/news-form.css',
+
         'lib/components/network-indicator.js',
         'lib/components/news-form.js',
-        'app.js',
+        'lib/helpers/news-helper.js',
 
         'img/kingsman-logo.png',
+        'img/components/add-button.png',
 
         'img/avatars/gavin.png',
         'img/avatars/andrew.png',
@@ -53,14 +59,18 @@ self.addEventListener('activate', (event) => {
         throw new Error(err);
     });
 
-    Dexie.exists(SWName)
+    let dbCreated = Dexie.exists(SWName)
         .then((exists) => {
             if (exists) {
-                return;
+                console.log(SWName, 'exists, deleting');
+                return Dexie.delete(SWName)
+                    .then(() => createDB(SWName));
             }
 
-            createDB(SWName);
+            return createDB(SWName);
         });
+
+    event.waitUntil(dbCreated);
 });
 
 self.addEventListener('fetch', (event) => {
@@ -72,6 +82,8 @@ self.addEventListener('fetch', (event) => {
     if (path.endsWith('news.json')) {
         switch (method) {
             case 'POST':
+                debugger;
+
                 writeToDB(event.request);
                 break;
 
@@ -165,13 +177,10 @@ function cacheResponse(cacheName, request, response) {
 }
 
 function getDB(dbName) {
-    console.info('setting up db', dbName);
-    // Dexie.delete(dbName);
-
     let db = new Dexie(dbName);
 
     db.version(version)
-        .stores({'news': 'id'});
+        .stores({'news': '++id'});
 
     return db;
 }
@@ -179,15 +188,17 @@ function getDB(dbName) {
 function createDB(dbName) {
     let db = getDB(dbName);
 
-    db.open()
+    return db.open()
         .then(() => console.info(SWName, 'database created'))
-        // .then(() => initData(db))
-        // .then(() => console.info(SWName, 'initial data added to database'));
+        .then(() => initData(db))
+        .then(() => console.info(SWName, 'initial data added to database'));
 }
 
 function initData(db) {
     console.info(SWName, 'initialising db with remote data');
+
     return fetch(new Request('news.json'))
         .then((response) => response.json())
-        .then((json) => db.news.bulkAdd(json.news));
+        .then((json) => db.news.bulkAdd(json.news))
+        .catch((err) => console.error(err));
 }

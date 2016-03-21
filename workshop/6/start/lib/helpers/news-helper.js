@@ -1,4 +1,4 @@
-(function (window) {
+(function (root) {
     'use strict';
 
     let NewsHelper = {};
@@ -51,6 +51,6 @@
         return fetch(url, options);
     };
 
-    window.NewsHelper = NewsHelper;
+    root.NewsHelper = NewsHelper;
 
-}(window));
+}(self || window));

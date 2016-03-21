@@ -1,21 +1,70 @@
 itslearning offline workshop
 ============================
 
-Before you start, you should know that the set of examples is meant to be accompanying material and
-the actual workshop files are in the workshop folder.
+## Requirements
 
-It will cover a few technologies that are associated with newer browser technologies that can be
-put to use to provide a user with a better offline experience and less network traffic by utilising
-different techniques and APIs.
-
-Not all of these techniques are available in all browsers at this time, so for now, use Chrome.
-
-This was developed on top of Chrome 49. I would use that version or higher for the time being.
+### Chrome
+**Chrome 49+.** If you have not restarted your Chrome in a while, you may not have it.
+Chrome *Settings > About* will tell you the version you are running.
 
 **Always have your console open and your cache turned off.** It is best to deal with one layer of
 caching at a time ;)
 
-## What the hell is going on in here?
+### A web server
+Even if you have a local web server set up I would advise to use the python simple server.
+
+It's cross platform, is easy to install (comes with python), requires no configuration and gives a
+nice console output to watch.
+
+Of course, it is up to you. I'm sure NGinx and Apache will be fine too.
+
+#### Download python
+If you are on Windows, you may need to install Python.
+
+https://www.python.org/downloads/windows/
+
+You can use Python 2 or 3, it doesn't matter. Instructions for both are included below.
+
+**When you install, please remember to tick the box 'Add to PATH'.**
+
+#### Running the Python server
+Run this command in the root folder of this repository so that your service worker url changes when
+you open a different folder.
+
+```shell
+# This command serves the current directory on 0.0.0.0:8000 in python 2
+python -m SimpleHTTPServer 8000
+
+# and for python 3
+python3 -m http.server 8000
+```
+
+You can access the served directory at localhost:8000.
+
+You must use **localhost** in Chrome if you do not wish to use https to run service-workers.
+
+## Setup
+1. Clone repo and create a new git working branch.
+2. Open in your favourite web editor (for HTML, CSS, javascript).
+3. Start the python server
+4. Ensure your webserver is serving the root directory.
+5. Browse to localhost:8000
+
+## Learning instructions
+There is a local README in each of the example folders.
+
+### Subjects covered
+
+- Basic offline detection.
+- Introduction to ServiceWorkers and their lifecycle.
+- ServiceWorkers
+ - Interfering with requests.
+ - Caching and returning offline content
+- Introduction to the Cache API.
+ - Write a request response key value pair to the Cache.
+ - Check if cache exists for a request
+
+## This doesn't look like the javascript I know
 If you have not been working with javascript for a while, some of the code or patterns in these
 examples may look a little strange.
 
@@ -40,51 +89,6 @@ and more informally [this article](http://www.html5rocks.com/en/tutorials/es6/pr
 * [IndexedDB API](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
 * [Functional programming](https://www.smashingmagazine.com/2014/07/dont-be-scared-of-functional-programming/)
  * [Higher order functions](https://medium.com/humans-create-software/a-dirt-simple-introduction-to-higher-order-functions-in-javascript-b33bf9e19056#.dmal6ulvs)
-
-## Requirements
-Even if you have a local web server set up I would advise to use the
-[Python SimpleHTTPServer](http://www.linuxjournal.com/content/tech-tip-really-simple-http-server-python)
-
-It's cross platform, is easy to install (comes with python), requires no configuration and gives a
-nice console output to watch.
-
-Run this command in the root folder of this repository so that your service worker url changes when
-you open a different folder.
-
-```shell
-# This command serves the current directory on 0.0.0.0:8000
-python -m SimpleHTTPServer
-
-# This command serves the current directory on 0.0.0.0:8001
-python -m SimpleHTTPServer 8001
-```
-
-You can access the served directory at localhost:8000 or 127.0.0.1:8000.
-
-You can use **localhost** to develop service workers locally on http, unless you have a valid TLS
-certificate for the domain.
-
-## Setup
-1. Clone repo and create a new git working branch.
-2. Open in your favourite web editor (for HTML, CSS, javascript).
-3. Start the python server
-4. Ensure your webserver is serving the root directory.
-5. Browse to localhost:8000
-
-## Learning instructions
-There is a local README in each of the example folders.
-
-### Subjects covered
-
-- Basic offline detection.
-- Introduction to ServiceWorkers and their lifecycle.
-- ServiceWorkers
- - Interfering with requests.
- - Caching and returning offline content
-- Introduction to the Cache API.
- - Write a request response key value pair to the Cache.
- - Check if cache exists for a request
-- Introduction to IndexedDB
 
 ## Trouble shooting
 ### Page is not loading

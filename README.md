@@ -53,24 +53,26 @@ You must use **localhost** in Chrome if you do not wish to use https to run serv
 ## Learning instructions
 There is a local README in each of the example folders.
 
-### Subjects covered
+jQuery has been included in the workshop folder if you prefer to work with it.
 
+### Subjects covered
 - Basic offline detection.
 - Introduction to ServiceWorkers and their lifecycle.
 - ServiceWorkers
- - Interfering with requests.
- - Caching and returning offline content
+ - Intercepting requests.
+ - Installing offline content into the cache.
+ - Responding to network requests with cached content.
 - Introduction to the Cache API.
  - Write a request response key value pair to the Cache.
  - Check if cache exists for a request
 
-## This doesn't look like the javascript I know
+## This code doesn't look like javascript
 If you have not been working with javascript for a while, some of the code or patterns in these
-examples may look a little strange.
+examples may look strange.
 
 If you want to know more about some of these techniques, I have been trying to update a list of
 those items here, so when you come across something that is weird or you've not seen before, you
-can come here to check if I've been thorough.
+can come here to look it up.
 
 * [Console API](https://developer.chrome.com/devtools/docs/console-api)
 * [let](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/let)
@@ -92,55 +94,30 @@ and more informally [this article](http://www.html5rocks.com/en/tutorials/es6/pr
 
 ## Trouble shooting
 ### Page is not loading
-Please check that your webserver is running in the root directory, that's this one, and that the
-uri you are using in the browser address bar is correct e.g. http://localhost:8000/examples/0 .
+Please check that your webserver is running in the root directory, that's the directory this README
+is in, and that the url you are using in the browser address bar is correct.
+e.g. http://localhost:8000/workshop/0/start
 
 ### ERR_FILE_EXISTS
-If you see this error in your console or network tab (ERR_FILE_EXISTS) for the service worker, don't
-worry. [This patch](https://bugs.chromium.org/p/chromium/issues/detail?id=541797) will remove that
+If you see this error in your console or network tab for the service worker, don't
+worry.
+
+[This patch](https://bugs.chromium.org/p/chromium/issues/detail?id=541797) will remove that
 noise, you shouldn't experience any issues.
 
-### Debugging service workers
+### Uncaught (in promise) SyntaxError: Unexpected token o
+Make sure you stringify any objects you wish to use in a response.
+
+```javascript
+let responseData = JSON.stringify({}),
+    response = new Response(responseData);
+
+event.respondWith(response);
+```
+
+### Debugging
 In Chrome, open 'Developer Tools'->'Resources' and take a look at the different resources
 available.
 
 * Use 'Service Workers' to examine and inspect your service worker.
 * Use 'Cache Storage' to examine the cache buckets and request/response pairs you are storing.
-
-To see what your browser has stored about service workers:
-* chrome://serviceworker-internals
-* chrome://inspect/#service-workers
-
-If you want to learn about the tooling in Firefox,
-[take a look at this video](https://www.youtube.com/watch?v=1FWUYHxt5W4) and read [this article](https://hacks.mozilla.org/2016/03/debugging-service-workers-and-push-with-firefox-devtools/).
-
-## Other important things to consider
-Even if can make a good browser offline experience, should we? What if a computer is a shared
-resource?
-
-### Storage capacity in the browser
-Filling up a browser with locally stored assets and data is not to be taken lightly.
-
-It is essential to find out more about browser
-[storage limits and eviction rules](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Browser_storage_limits_and_eviction_criteria)
-in order to understand the effect it will have on your application.
-
-### Security of locally stored data
-Moreover, there are important security implications when storing a users data in the browser and so
-some form of encryption. An [older article here](https://tonyarcieri.com/whats-wrong-with-webcrypto)
-should ensure you that it is not a good idea to do encryption in the browser.
-
-Using the SessionStorage is another way of ensuring that locally cached data will not be available
-should the browser tab close.
-
-
-### So, we can't use it?
-Regardless of the valid technical issues stated in this section, it doesn't mean there is no offline
-future worth discussing.
-
-Product decisions can help circumvent them, for instance, by asking the
-user to opt in to offline storage, and warning them that their device must be private, used only
-by them.
-
-Making it easy for someone to remove all traces of offline data would also be something to look
-into.

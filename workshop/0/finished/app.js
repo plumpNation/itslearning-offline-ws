@@ -1,18 +1,18 @@
 (function () {
     'use strict';
 
-    let changeState = function (targetId) {
-            let onlineIndicator = document.getElementById(targetId),
-                onlineState     = navigator.onLine ? 'online' : 'offline';
+    let changeState = function () {
+            let element = document.getElementById('network-indicator'),
+                state   = navigator.onLine ? 'online' : 'offline';
 
-            onlineIndicator.className = onlineState;
+            element.className = state;
         },
 
         setupNetworkIndication = function (targetId) {
-            window.addEventListener('offline', () => changeState(targetId));
-            window.addEventListener('online',  () => changeState(targetId));
+            window.addEventListener('offline', changeState);
+            window.addEventListener('online',  changeState);
 
-            changeState(targetId);
+            changeState();
         },
 
         loadAndShowNews = function () {

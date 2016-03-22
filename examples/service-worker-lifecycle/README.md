@@ -34,7 +34,11 @@ there is an [easy example](https://serviceworke.rs/immediate-claim.html) in the
 [mozilla service workers cookbook](https://serviceworke.rs/).
 
 ```javascript
-self.skipWaiting();
+// in the `install` handler
+event.waitUntil(self.skipWaiting());
+
+// in the `activate` handler
+event.waitUntil(self.clients.claim());
 ```
 
 ### installing

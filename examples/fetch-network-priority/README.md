@@ -1,5 +1,9 @@
-Kitchen sink
-============
+Fetch network priority
+======================
+
+An example that will attempt to load assets from the network if online, caching them on response.
+
+If offline, the last cached version of the asset will be served.
 
 ## What is in the page?
 1. A list of hardcoded news articles.

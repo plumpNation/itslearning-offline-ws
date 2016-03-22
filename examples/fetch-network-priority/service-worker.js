@@ -5,7 +5,7 @@
  */
 
 // The version should be unique, it's the name for the CacheStorage instance
-let VERSION = 'v1-kitchen-sink-example',
+let VERSION = 'v1-fetch-network-priority-example',
 
     // The files we want to cache
     whitelist = [

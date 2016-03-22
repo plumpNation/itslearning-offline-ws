@@ -1,14 +1,14 @@
 (function () {
     'use strict';
 
-    let changeState = function () {
-            let element = document.getElementById('network-indicator'),
-                state   = navigator.onLine ? 'online' : 'offline';
+    let setupNetworkIndicator = function () {
+            let changeState = function () {
+                    let element = document.getElementById('network-indicator'),
+                        state   = navigator.onLine ? 'online' : 'offline';
 
-            element.className = state;
-        },
+                    element.className = state;
+                };
 
-        setupNetworkIndication = function (targetId) {
             window.addEventListener('offline', changeState);
             window.addEventListener('online',  changeState);
 
@@ -28,7 +28,7 @@
         init = function () {
             loadAndShowNews();
 
-            setupNetworkIndication('network-indicator');
+            setupNetworkIndicator();
         };
 
     document.addEventListener('DOMContentLoaded', init);

@@ -22,43 +22,26 @@ self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request.url);
 
     if (!event.request.url.endsWith('news.json')) {
-        // returning undefined will not change the response or request.
         return;
     }
 
-    // Since we are taking control of the request, we will have to provide a response.
-    event.respondWith(fetchAndCache(version, event.request));
+    let fetchedNews =
+            fetch(event.request.clone())
+                .then(function (response) {
+
+                    cacheResponse(event.request, response.clone());
+
+                    return response;
+                });
+
+    // fetch the request, cache it and respond with the response
+
+    event.respondWith(fetchedNews);
 });
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////  HELPERS  //////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Fetches a request, caches the response and returns the original response
- *
- * @param  {string} cacheName
- * @param  {Request} request
- * @return {Promise} A Promise that resolves to a Response object.
- */
-function fetchAndCache(cacheName, request) {
-    return fetch(request.clone())
-        .then((response) => cacheResponse(cacheName, request, response));
-}
-
-/**
- * @param  {string}   cacheName
- * @param  {Request}  request
- * @param  {Response} response
- * @return {Response} The response object we passed in
- */
-function cacheResponse(cacheName, request, response) {
-    console.info('Caching', request.url, 'in', cacheName);
-
-    caches.open(cacheName)
-        .then((cache) => cache.put(request, response.clone()));
-
-    // cache.put is asynchronous but we don't need to wait for the cache to be written,
-    // to response, so we can return the response straight away.
-    return response;
+function cacheResponse(request, response) {
+    caches.open(version)
+        .then(function (cache) {
+            cache.put(request, response);
+        });
 }

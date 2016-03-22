@@ -7,9 +7,8 @@ Offline detection
 4. Some arbitrary HTML.
 
 ## What to do
-
 1. Open a browser tab.
-2. Open the web developer tools on the console tab.
+2. Open the console in the web developer tools.
 3. Experiment with the `navigator.onLine` property.
 
 ```javascript

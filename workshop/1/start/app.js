@@ -14,6 +14,8 @@
         init = function () {
             loadAndShowNews();
 
+            // The network indicator code and html has been moved to a component
+            // to make sure this file remains legible.
             new NetworkIndicator({'target': 'network-indicator'});
         };
 

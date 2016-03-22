@@ -1,15 +1,7 @@
 (function () {
     'use strict';
 
-    let setupServiceWorker = function (workerUrl, options) {
-            navigator.serviceWorker
-                .register(workerUrl, options)
-                .then((registration) => {
-                    console.info('Registered', workerUrl, 'on scope', registration.scope);
-                });
-        },
-
-        loadAndShowNews = function () {
+    let loadAndShowNews = function () {
             let newsHelper = new NewsHelper({
                 'target' : 'news-items',
                 'service': 'news.json'
@@ -20,11 +12,11 @@
         },
 
         init = function () {
+            navigator.serviceWorker.register('service-worker.js');
+
             loadAndShowNews();
 
             new NetworkIndicator({'target': 'network-indicator'});
-
-            setupServiceWorker('service-worker.js', {'scope': './'});
         };
 
     document.addEventListener('DOMContentLoaded', init);

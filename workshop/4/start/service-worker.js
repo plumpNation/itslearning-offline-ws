@@ -27,7 +27,5 @@ self.addEventListener('fetch', (event) => {
                     return response.clone();
                 });
 
-    // fetch the request, cache it and respond with the response
-
     event.respondWith(fetchedNews);
 });

@@ -14,58 +14,36 @@ self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request.url);
 
     if (!event.request.url.endsWith('news.json')) {
-        // returning undefined will not change the response or request.
         return;
     }
 
-    // Since we are taking control of the request, we will have to provide a response.
-    event.respondWith(fetchCachePriority(version, event.request));
+    let fetchedNews =
+
+            // Look for a match in the CacheStorage
+            // NOTE: we don't need to `open` a specific cache
+            caches.match(event.request)
+                .then((cachedResponse) => {
+
+                    // if a cached version exists, let's just return it
+                    if (cachedResponse) {
+                        console.info('Cache found. Using it.');
+                        return cachedResponse;
+                    }
+
+                    // if not, we can use the code from the last workshop to do the network
+                    // request and then cache and return the response.
+                    console.info('Fetching news from network');
+
+                    return fetch(event.request.clone())
+                        .then(function (response) {
+
+                            console.info('Caching news');
+                            caches.open(version)
+                                .then((cache) => cache.put(event.request, response));
+
+                            return response.clone();
+                        });
+                });
+
+    event.respondWith(fetchedNews);
 });
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////  HELPERS  //////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Fetches a request, caches the response and returns the original response
- *
- * @param  {string} cacheName
- * @param  {Request} request
- * @return {Promise} A Promise that resolves to a Response object.
- */
- function fetchCachePriority(cacheName, request) {
-     console.info('Looking for cached data');
-
-     // check the cachestorage for a match
-     return caches.match(request)
-         .then((cachedResponse) => {
-             if (cachedResponse) {
-                 console.info('Found cached data');
-                 return cachedResponse;
-             }
-
-             console.info('Data not found in cache, fetching from network');
-
-             return fetchAndCache(cacheName, request);
-         });
-
- }
-
- function fetchAndCache(cacheName, request) {
-     return fetch(request.clone())
-         .then((response) => cacheResponse(cacheName, request, response));
- }
-
-/**
- * @param {string}   cacheName
- * @param {Request}  request
- * @param {Response} response
- */
-function cacheResponse(cacheName, request, response) {
-    console.info('Caching', request.url, 'in', cacheName);
-
-    caches.open(cacheName)
-        .then((cache) => cache.put(request, response.clone()));
-
-    return response;
-}

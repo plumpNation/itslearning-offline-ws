@@ -13,7 +13,9 @@
 
         init = function () {
             loadAndShowNews();
+
             new NetworkIndicator({'target': 'network-indicator'});
+
             navigator.serviceWorker.register('service-worker.js');
         };
 

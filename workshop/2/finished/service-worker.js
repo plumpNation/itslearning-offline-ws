@@ -1,11 +1,3 @@
-/**
- * A service worker must be directly on the scope.
- * The service worker will only catch requests from clients under the service worker's scope.
- * The max scope for a service worker is the location of the worker.
- */
-
-// Adjust this version and watch the effect it has on the workers when you refresh, then
-// close the browser tab.
 let version = 'v1-intercept-fetch';
 
 console.info('Executing service worker for', version);
@@ -19,17 +11,14 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    let myNews,
-        requestPath = event.request.url;
-
     console.info(version, 'requesting', event.request.url);
 
-    if (!requestPath.endsWith('news.json')) {
+    if (!event.request.url.endsWith('news.json')) {
         // returning undefined will not change the response or request.
         return;
     }
 
-    myNews = JSON.stringify({
+    let myNews = JSON.stringify({
         'news': [{
             'headline': 'I intercepted the request',
             'body'    : 'And this is the message of love I am bringing to you <3',
@@ -38,6 +27,7 @@ self.addEventListener('fetch', (event) => {
         }]
     });
 
-    // NOTE: the `respondWith` method is on the `event` object. It requires a `Response` object.
+    // NOTE: the `respondWith` method is on the `event` object. It requires a `Response` object
+    // or a Promise that resolves to a Response object.
     event.respondWith(new Response(myNews));
 });

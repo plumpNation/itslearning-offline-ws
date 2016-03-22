@@ -1,20 +1,26 @@
-let version = 'v1-caching-page-assets',
+let version = 'v1-retrieving-cached-assets',
 
     // The files we want to cache
-    whitelistURIs = [
-        '/'
-        // add your whitelist items here
+    whitelistURLs = [
+        '/',
+        'css/pure/pure-min.css',
+        'css/pure/grids-responsive-min.css',
+        'css/news.css',
+        'css/components/network-indicator.css',
+
+        'img/kingsman-logo.png',
+        'img/avatars/gavin.png',
+
+        'lib/network-indicator.js',
+        'lib/news-helper.js',
+
+        'app.js',
     ];
 
 console.info('Executing service worker for', version);
 
 self.addEventListener('install', (event) => {
-    // you will add your whitelist to the cache here
-
     console.info(version, 'installing');
-
-    // it's a good idea to wait for the caching to finish
-    // event.waitUntil(cachesAreWritten);
 });
 
 self.addEventListener('activate', (event) => {
@@ -25,66 +31,40 @@ self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request.url);
 
     if (!event.request.url.endsWith('news.json')) {
-        // returning undefined will not change the response or request.
         return;
     }
 
-    // Since we are taking control of the request, we will have to provide a response.
-    event.respondWith(fetchCachePriority(version, event.request));
+    let fetchedNews =
+
+            // Look for a match in the CacheStorage
+            // NOTE: we don't need to `open` a specific cache
+            caches.match(event.request)
+                .then((cachedResponse) => {
+
+                    // if a cached version exists, let's just return it
+                    if (cachedResponse) {
+                        console.info('Cache found', event.request.url);
+                        return cachedResponse;
+                    }
+
+                    // if not, we can use the code from the last workshop to do the network
+                    // request and then cache and return the response.
+                    return fetchAndCache(event.request.clone());
+                });
+
+    event.respondWith(fetchedNews);
 });
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////  HELPERS  //////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+function fetchAndCache(request) {
+    console.info('Fetching from network', request.url);
 
-/**
- * @param  {string} requestURI
- * @return {boolean} true if the requestURI ends with anything in the whitelist.
- */
-function inWhitelist(requestURI) {
-    return whitelistURIs.some((whitelistURI) => {
-        return requestURI.endsWith(whitelistURI);
-    });
-}
-
-/**
- * Fetches a request, caches the response and returns the original response
- *
- * @param  {string} cacheName
- * @param  {Request} request
- * @return {Promise} A Promise that resolves to a Response object.
- */
-function fetchCachePriority(cacheName, request) {
-    let requestClone = request.clone();
-
-    return caches.match(request)
-        .then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-
-            return fetchAndCache(cacheName, requestClone);
-        });
-}
-
-function fetchAndCache(cacheName, request) {
     return fetch(request)
-        .then((response) => cacheResponse(cacheName, request, response));
-}
+        .then(function (response) {
+            console.info('Caching', request.url);
 
-/**
- * @param {string}   cacheName
- * @param {Request}  request
- * @param {Response} response
- */
-function cacheResponse(cacheName, request, response) {
-    // We need to clone the response too, as we will use it more than once.
-    let responseClone = response.clone();
+            caches.open(version)
+                .then((cache) => cache.put(request, response));
 
-    console.info('Caching', request.url, 'in', cacheName);
-
-    caches.open(cacheName)
-        .then((cache) => cache.put(request, responseClone));
-
-    return response;
+            return response.clone();
+        });
 }

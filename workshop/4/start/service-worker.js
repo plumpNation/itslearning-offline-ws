@@ -21,19 +21,13 @@ self.addEventListener('fetch', (event) => {
             fetch(event.request.clone())
                 .then(function (response) {
 
-                    cacheResponse(event.request, response.clone());
+                    caches.open(version)
+                        .then((cache) => cache.put(event.request, response));
 
-                    return response;
+                    return response.clone();
                 });
 
     // fetch the request, cache it and respond with the response
 
     event.respondWith(fetchedNews);
 });
-
-function cacheResponse(request, response) {
-    caches.open(version)
-        .then(function (cache) {
-            cache.put(request, response);
-        });
-}

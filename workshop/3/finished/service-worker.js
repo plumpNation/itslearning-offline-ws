@@ -27,23 +27,15 @@ self.addEventListener('fetch', (event) => {
                 // fetch returns a Promise
                 .then(function (response) {
 
-                    // Use a clone of the response object as we will use it again
-                    // in `event.respondWith()`
-                    cacheResponse(event.request, response.clone());
+                    // Open the cache (by key) to use it
+                    caches.open(version)
+                        .then((cache) => cache.put(event.request, response));
 
-                    // So the end result of this fetch then chain is that fetchedNews will be
-                    // a Promise that resolves to this response;
-                    return response;
+                    // Make a .clone() of the response object as the cache open above is async, as
+                    // the response that is cached will be used after this.
+                    return response.clone();
                 });
 
     // NOTE: Called synchronously
     event.respondWith(fetchedNews);
 });
-
-function cacheResponse(request, response) {
-    caches.open(version)
-        .then(function (cache) {
-            console.info('Caching -->', request.url, '<--');
-            cache.put(request, response);
-        });
-}

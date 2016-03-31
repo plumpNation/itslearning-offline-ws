@@ -39,7 +39,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    let fetchedNews =
+    let fetchedRequest =
 
             // Look for a match in the CacheStorage
             // NOTE: we don't need to `open` a specific cache
@@ -57,7 +57,7 @@ self.addEventListener('fetch', (event) => {
                     return fetchAndCache(event.request.clone());
                 });
 
-    event.respondWith(fetchedNews);
+    event.respondWith(fetchedRequest);
 });
 
 function fetchAndCache(request) {
@@ -80,6 +80,8 @@ function fetchAndCache(request) {
  */
 function inWhitelist(requestURL) {
     return whitelistURLs.some((whitelistURL) => {
-        return requestURL.endsWith(whitelistURL);
+        let request = new Request(whitelistURL);
+
+        return requestURL === request.url;
     });
 }

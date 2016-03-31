@@ -2,7 +2,7 @@ let version = 'v1-retrieving-cached-assets',
 
     // The files we want to cache
     whitelistURLs = [
-        '/',
+        './',
         'css/pure/pure-min.css',
         'css/pure/grids-responsive-min.css',
         'css/news.css',

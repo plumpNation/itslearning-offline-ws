@@ -11,14 +11,17 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    let myNews,
+        newsPath = new Request('news.json').url;
+
     console.info(version, 'requesting', event.request.url);
 
-    if (!event.request.url.endsWith('news.json')) {
+    if (event.request.url !== newsPath) {
         // returning undefined will not change the response or request.
         return;
     }
 
-    let myNews = JSON.stringify({
+    myNews = JSON.stringify({
         'news': [{
             'headline': 'I intercepted the request',
             'body'    : 'And this is the message of love I am bringing to you <3',

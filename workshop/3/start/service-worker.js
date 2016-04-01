@@ -11,9 +11,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    let newsPath = new Request('news.json').url;
+
     console.info(version, 'requesting', event.request.url);
 
-    if (!event.request.url.endsWith('news.json')) {
+    if (event.request.url !== newsPath) {
         // returning undefined will not change the response or request.
         return;
     }

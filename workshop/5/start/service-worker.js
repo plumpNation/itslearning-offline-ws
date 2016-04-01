@@ -28,13 +28,16 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    let fetchedNews,
+        newsPath = new Request('news.json').url;
+
     console.info(version, 'requesting', event.request.url);
 
-    if (!event.request.url.endsWith('news.json')) {
+    if (event.request.url !== newsPath) {
         return;
     }
 
-    let fetchedNews =
+    fetchedNews =
 
             // Look for a match in the CacheStorage
             // NOTE: we don't need to `open` a specific cache

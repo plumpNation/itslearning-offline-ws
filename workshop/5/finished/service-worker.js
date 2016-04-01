@@ -32,10 +32,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    let newsPath = new Request('news.json').url;
+
     console.info(version, 'requesting', event.request.url);
 
     if (!inWhitelist(event.request.url) &&
-        !event.request.url.endsWith('news.json')) {
+        event.request.url !== newsPath) {
         return;
     }
 

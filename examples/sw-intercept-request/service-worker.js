@@ -22,7 +22,7 @@ self.addEventListener('fetch', (event) => {
     console.info(version, 'requesting', event.request);
 
     // if it's not our snippet
-    if (!event.request.url.endsWith('/snippet.html')) {
+    if (event.request.url !== new Request('snippet.html').url) {
         // do nothing
         return;
     }
